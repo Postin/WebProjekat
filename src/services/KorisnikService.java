@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -52,6 +53,25 @@ public class KorisnikService {
 	}
 	
 	
-	
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response login(Korisnik user, @Context HttpServletRequest request) {
+		
+		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
+		Korisnik k = korisnici.findUser(user);
+		
+		if(k == null) {
+			System.out.println("Greska, korisnik ne postoji u sistemu!");
+			return Response.status(401).build();	
+		}
+		
+		
+		ctx.setAttribute("korisnikDAO", korisnici);
+		request.getSession().setAttribute("user", user);
+		System.out.println("Uspesan login!");
+		return Response.status(200).build();		
+	}
 	
 }
