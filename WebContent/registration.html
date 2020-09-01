@@ -1,0 +1,64 @@
+<html>
+
+<head>
+	<title>Registration</title>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!------ Include the above in your HEAD tag ---------->
+	<link rel="stylesheet" href="css/registration.css">
+	<script src="js/registration.js"></script>
+
+</head>
+
+<body>
+    <div id="register">
+        <div class="container">
+            <div id="register-row" class="row justify-content-center align-items-center">
+                <div id="register-column" class="col-md-6">
+                    <div id="register-box" class="col-md-12">
+                        <form id="register-form" class="form" action="" method="post">
+                            <h3 class="text-center text-info">Register</h3>
+                            <div class="form-group">
+                                <label for="username" class="text-info">Username:</label><br>
+                                <input type="text" name="username" id="username" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="text-info">Password:</label><br>
+                                <input type="text" name="password" id="password" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm" class="text-info">Confirm Password:</label><br>
+                                <input type="text" name="confirm" id="confirm" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="text-info">Name:</label><br>
+                                <input type="text" name="name" id="name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="surname" class="text-info">Surname:</label><br>
+                                <input type="text" name="surname" id="surname" class="form-control">
+                            </div>
+                            <div class="form-group">
+                            	<input type="radio" name="gender" id="musko" value="MUSKO">
+                            	<label for="male" class="text-info">Male</label>
+                            	<input type="radio" name="gender" id="zensko" value="ZENSKO">
+                            	<label for="female" class="text-info">Female</label>
+                            	<input type="radio" name="gender" id="drugo" value="DRUGO">
+                            	<label for="other" class="text-info">Other</label>                            	
+                            </div>
+                            <div class="form-group" style="display: flex;justify-content: center;">
+                                <input type="button" onclick="register()" name="submit" class="btn btn-info btn-md" value="Register">
+                            </div>
+                            <div id="login-link" class="text-right">
+                                <a href="login.html" class="text-info">Login here</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

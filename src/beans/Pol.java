@@ -1,7 +1,7 @@
 package beans;
 
 public enum Pol {
-	MUSKI,
-	ZENSKI,
+	MUSKO,
+	ZENSKO,
 	DRUGO
 }
