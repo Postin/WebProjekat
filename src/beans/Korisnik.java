@@ -1,17 +1,61 @@
 package beans;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Korisnik {
 	
-	private UUID id = UUID.randomUUID();
+	private UUID id;
 	private String korisnickoIme;
 	private String lozinka;
 	private String ime;
 	private String prezime;
 	private Pol pol;
 	private Uloga uloga;
+	private ArrayList<Apartman> apartmaniZaIzdavanje; //ako je korisnik domacin
+	private ArrayList<Apartman> iznajmljeniApartmani; // gost
+	private ArrayList<Rezervacija> rezervacije; // gost
 	
+	public Korisnik() {
+		// TODO Auto-generated constructor stub
+		this.id = UUID.randomUUID();
+	}
+	
+	//administrator
+	public Korisnik(String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga) {
+		this.id = UUID.randomUUID();
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prz;
+		this.pol = pol;
+		this.uloga = uloga;
+	}
+	
+	//domacin
+	public Korisnik(String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> apartmaniZaIzdavanje) {
+		this.id = UUID.randomUUID();
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prz;
+		this.pol = pol;
+		this.uloga = uloga;
+		this.apartmaniZaIzdavanje = apartmaniZaIzdavanje;
+	}
+	
+	//gost
+	public Korisnik(String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> iznajmljeni, ArrayList<Rezervacija> rezervacije) {
+		this.id = UUID.randomUUID();
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prz;
+		this.pol = pol;
+		this.uloga = uloga;
+		this.iznajmljeniApartmani = iznajmljeni;
+		this.rezervacije = rezervacije;
+	}
 	
 	public String getKorisnickoIme() {
 		return korisnickoIme;
@@ -54,6 +98,24 @@ public class Korisnik {
 	}
 	public void setId(UUID id) {
 		this.id = id;
+	}
+	public ArrayList<Apartman> getApartmaniZaIzdavanje() {
+		return apartmaniZaIzdavanje;
+	}
+	public void setApartmaniZaIzdavanje(ArrayList<Apartman> apartmaniZaIzdavanje) {
+		this.apartmaniZaIzdavanje = apartmaniZaIzdavanje;
+	}
+	public ArrayList<Apartman> getIznajmljeniApartmani() {
+		return iznajmljeniApartmani;
+	}
+	public void setIznajmljeniApartmani(ArrayList<Apartman> iznajmljeniApartmani) {
+		this.iznajmljeniApartmani = iznajmljeniApartmani;
+	}
+	public ArrayList<Rezervacija> getRezervacije() {
+		return rezervacije;
+	}
+	public void setRezervacije(ArrayList<Rezervacija> rezervacije) {
+		this.rezervacije = rezervacije;
 	}
 
 }
