@@ -12,7 +12,12 @@ public class KorisnikDAO {
 	
 	public KorisnikDAO() {
 		// TODO Auto-generated constructor stub
-		korisnici.put(UUID.randomUUID(), new Korisnik("123","123","Filip","Vozarevic",Pol.MUSKO,Uloga.GOST));
+		UUID id1 = UUID.randomUUID();
+		UUID id2 = UUID.randomUUID();
+		UUID id3 = UUID.randomUUID();
+		korisnici.put(id1, new Korisnik(id1,"gost","gost","Filip","Vozarevic",Pol.MUSKO,Uloga.GOST));
+		korisnici.put(id2, new Korisnik(id2,"admin","admin","Filip","Vozarevic",Pol.MUSKO,Uloga.ADMINISTRATOR));
+		korisnici.put(id3, new Korisnik(id3,"domacin","domacin","Filip","Vozarevic",Pol.MUSKO,Uloga.DOMACIN));
 	}
 	
 	public Korisnik findUser(Korisnik user) {
@@ -45,5 +50,10 @@ public class KorisnikDAO {
 
 	public void setKorisnici(HashMap<UUID, Korisnik> korisnici) {
 		this.korisnici = korisnici;
+	}
+
+	public Korisnik findUser(UUID id) {
+		Korisnik k = korisnici.get(id);
+		return k;
 	}
 }

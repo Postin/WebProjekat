@@ -1,3 +1,12 @@
+
+	
+$(document).ready(function() {
+	//ako je korisnik vec ulogovan, redirekcija na index.html
+	if(sessionStorage.getItem("id") != null) {
+		//window.location.href = "index.html"; TO DO - otkomentarisati posle, za sada samo smeta
+	}
+});
+
 function login() {
 	let korisnickoIme = $('#username').val();
 	let lozinka = $('#password').val();
@@ -6,6 +15,7 @@ function login() {
 		return;
 	}
 	
+	
 	$.ajax({
 		url:'rest/users/login',
 		type:'POST',
@@ -13,8 +23,26 @@ function login() {
 		contentType:'application/json',
 		success: function(id) {
 			sessionStorage.setItem("id", id);
-			//redirekcija u odnosu na tip korisnika sa jos jednim $.ajax() pozivom
 			
+			//redirekcija u odnosu na tip korisnika sa jos jednim $.ajax() pozivom
+			$.ajax({
+				url:'rest/users/uloga/'+sessionStorage.getItem("id"),
+				type:'GET',
+				success: function(korisnik) {
+					if(korisnik.uloga == 'GOST') {
+						window.location.href = "gost.html";
+						
+					} else if(korisnik.uloga == 'DOMACIN') {
+						window.location.href = "domacin.html";
+						
+					} else if(korisnik.uloga == 'ADMINISTRATOR') {
+						window.location.href = "administrator.html";
+					}
+				},
+				error: function() {
+					alert('Nema ulogovanog korisnika.');
+				}
+			});
 			
 		},
 		error: function() {

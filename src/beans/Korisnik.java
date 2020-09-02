@@ -19,11 +19,20 @@ public class Korisnik {
 	public Korisnik() {
 		// TODO Auto-generated constructor stub
 		this.id = UUID.randomUUID();
+		this.uloga = Uloga.GOST;
+		this.pol = Pol.MUSKO;
+		this.korisnickoIme = "";
+		this.lozinka = "";
+		this.ime = "";
+		this.prezime = "";
+		this.apartmaniZaIzdavanje = new ArrayList<>();
+		this.iznajmljeniApartmani = new ArrayList<>();
+		this.rezervacije = new ArrayList<>();
 	}
 	
 	//administrator
-	public Korisnik(String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga) {
-		this.id = UUID.randomUUID();
+	public Korisnik(UUID id,String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga) {
+		this.id = id;
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.ime = ime;
@@ -33,8 +42,8 @@ public class Korisnik {
 	}
 	
 	//domacin
-	public Korisnik(String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> apartmaniZaIzdavanje) {
-		this.id = UUID.randomUUID();
+	public Korisnik(UUID id, String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> apartmaniZaIzdavanje) {
+		this.id = id;
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.ime = ime;
@@ -45,8 +54,8 @@ public class Korisnik {
 	}
 	
 	//gost
-	public Korisnik(String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> iznajmljeni, ArrayList<Rezervacija> rezervacije) {
-		this.id = UUID.randomUUID();
+	public Korisnik(UUID id, String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> iznajmljeni, ArrayList<Rezervacija> rezervacije) {
+		this.id = id;
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.ime = ime;
