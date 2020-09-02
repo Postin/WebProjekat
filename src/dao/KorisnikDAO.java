@@ -4,13 +4,15 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import beans.Korisnik;
+import beans.Pol;
+import beans.Uloga;
 
 public class KorisnikDAO {
-	private HashMap<UUID, Korisnik> korisnici;
+	private HashMap<UUID, Korisnik> korisnici = new HashMap<UUID,Korisnik>();;
 	
 	public KorisnikDAO() {
 		// TODO Auto-generated constructor stub
-		this.korisnici = new HashMap<UUID,Korisnik>();
+		korisnici.put(UUID.randomUUID(), new Korisnik("123","123","Filip","Vozarevic",Pol.MUSKO,Uloga.GOST));
 	}
 	
 	public Korisnik findUser(Korisnik user) {
