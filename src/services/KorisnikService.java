@@ -1,5 +1,7 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,8 +19,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Korisnik;
+import beans.Rezervacija;
 import beans.Uloga;
+import dao.ApartmanDAO;
 import dao.KorisnikDAO;
+import dao.RezervacijaDAO;
 
 @Path("users")
 public class KorisnikService {
@@ -29,6 +35,14 @@ public class KorisnikService {
 	public void init() {
 		if(ctx.getAttribute("korisnikDAO")==null) {
 			ctx.setAttribute("korisnikDAO", new KorisnikDAO());
+		}
+		
+		if(ctx.getAttribute("apartmanDAO") == null) {
+			ctx.setAttribute("apartmanDAO", new ApartmanDAO());
+		}
+		
+		if(ctx.getAttribute("rezervacijaDAO") == null) {
+			ctx.setAttribute("rezervacijaDAO", new RezervacijaDAO());
 		}
 	}
 	
@@ -72,11 +86,10 @@ public class KorisnikService {
 		}
 		
 		ctx.setAttribute("korisnikDAO", korisnici);
-		request.getSession().setAttribute("user", user);
+		request.getSession().setAttribute("user", k);
 		System.out.println("Uspesan login!");
 		return k.getId();
-		//return Response.status(200).build();
-		
+		//return Response.status(200).build();	
 		
 	}
 	
@@ -84,7 +97,7 @@ public class KorisnikService {
 	@Path("/uloga/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Korisnik getUloga(@PathParam("id") UUID id) {
+	public Korisnik getUloga(@PathParam("id") Integer id) {
 		System.out.println(id);
 		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
 		Korisnik k = korisnici.findUser(id);
@@ -95,4 +108,105 @@ public class KorisnikService {
 		return k;
 	}
 	
+	@GET
+	@Path("/get_licni_podaci/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Korisnik getLicniPodaci(@PathParam("id") Integer id) {
+		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
+		Korisnik k = korisnici.findUser(id);
+		
+		return k;
+	}
+	
+	@PUT
+	@Path("/put_licni_podaci/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response izmeniLicnePodatke(@PathParam("id") Integer id, Korisnik user) {
+		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
+		Korisnik k = korisnici.findUser(id);
+		
+		k.setIme(user.getIme());
+		k.setPrezime(user.getPrezime());
+		k.setKorisnickoIme(user.getKorisnickoIme());
+		k.setLozinka(user.getLozinka());
+		
+		ctx.setAttribute("korisnikDAO", korisnici);
+		return Response.status(200).build();
+		
+	}
+	
+	@GET
+	@Path("/get_all")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Korisnik> getAllUsers() {
+		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
+		
+		ArrayList<Korisnik> users = new ArrayList<Korisnik>();
+		
+		for(Korisnik k :korisnici.getKorisnici().values()) {
+			users.add(k);
+		}
+		
+		return users;
+	}
+	
+	@POST
+	@Path("/search_users/{uloga}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON) // uloga je pathparam jer enum izbacuje gresku ako ne pise striktno ADMIN,GOST,DOMACIN, pa je ideja
+	public ArrayList<Korisnik> searchUsers(Korisnik k, @PathParam("uloga") String uloga) { // da ga poredimo kao string
+		System.out.println("usao");
+		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
+		
+		
+		
+		ArrayList<Korisnik> users = new ArrayList<Korisnik>();
+		for(Korisnik kor : korisnici.getKorisnici().values()) {
+			if(kor.getIme().contains(k.getIme()) && kor.getPrezime().contains(k.getPrezime()) &&
+					kor.getKorisnickoIme().contains(k.getKorisnickoIme()) && kor.getUloga().toString().contains(uloga)) {
+				users.add(kor);
+				
+				System.out.println(kor.getIme());
+			}
+		}
+		
+		return users;
+	}
+	
+	@GET
+	@Path("/get_all_gosti/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON) 
+	public ArrayList<Korisnik> getAllGosti(@Context HttpServletRequest request, @PathParam("id") Integer id) {
+		ArrayList<Korisnik> gosti = new ArrayList<Korisnik>();
+		RezervacijaDAO rezervacije = (RezervacijaDAO)ctx.getAttribute("rezervacijaDAO");
+		
+		 // iz nekog razloga id koji je sacuvan, nije isti kao id koji je prosledjen na front.
+		//Korisnik ulogovan = (Korisnik)request.getSession().getAttribute("user");
+		
+		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
+		HashMap<UUID,Korisnik> svi = korisnici.getKorisnici();
+		
+		for(Korisnik k : svi.values()) {
+			System.out.println("KORISNIK: " + k.getKorisnickoIme() + " ,ID: " + k.getId());
+		}
+		
+		System.out.println("ULOGOVAN: "+id);
+		
+		for(Rezervacija r: rezervacije.getRezervacije().values()) {
+			//System.out.println(r.getApartman().getDomacin().getId());
+			//if(r.getApartman().getDomacin().getId().equals(id)) {
+				
+			//	  if(!gosti.contains(r.getGost())) {
+					  gosti.add(r.getGost());
+					  
+			//	  }				 
+			//}
+		}
+		
+		return gosti;		
+	}
 }

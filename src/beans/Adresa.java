@@ -3,13 +3,13 @@ package beans;
 import java.util.UUID;
 
 public class Adresa {
-	private UUID id;
+	private Integer id;
 	private String ulicaIbr;
 	private String mesto;
 	private int postanskiBr;
 	
 	public Adresa() {
-		this.id = UUID.randomUUID();		
+		
 	}
 	
 	public Adresa(String ulicaIBr, String mesto, int postanskiBr) {
@@ -39,11 +39,11 @@ public class Adresa {
 		this.postanskiBr = postanskiBr;
 	}
 
-	public UUID getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 }

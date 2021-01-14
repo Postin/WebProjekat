@@ -1,10 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<title>Domacin</title>
+
+<script>
+function logout() {
+	sessionStorage.removeItem("id");
+	window.location.href = "login.html";
+}
+
+$(document).ready(function() {
+	// dovuci podatke za korisnika
+	let id = sessionStorage.getItem("id");
+	$.ajax({
+		url:'rest/users/get_all_gosti/' + id,
+		type:'GET',
+		success: function(data) {
+			$('#tblKorisnici tbody').html('');
+			for(i = 0; i < data.length; i++) {
+				addKorisnik(data[i]);
+			}
+		},
+		error: function(e) {
+			alert('error: ',e.message);
+		}
+	})
+});
+
+function addKorisnik(korisnik) {
+	let tr = $('<tr></tr>');
+	let tdKorIme = $('<td>'+korisnik.korisnickoIme+'</td>');
+	let tdIme = $('<td>'+korisnik.ime+'</td>');
+	let tdPrezime = $('<td>'+korisnik.prezime+'</td>');
+	let tdUloga = $('<td>'+korisnik.uloga+'</td>');
+	
+	tr.append(tdKorIme).append(tdIme).append(tdPrezime).append(tdUloga);
+	$('#tblKorisnici tbody').append(tr);
+}
+
+
+</script>
 </head>
 <body>
+
+	<a href="#" onclick="logout();">Logout</a>
+	<h4>Prikaz korisnika koji su napravili rezervaciju: </h4>
+	<table id="tblKorisnici" border="1">
+		<thead>
+			<tr>
+				<th>Korisnicko Ime</th>
+				<th>Ime</th>
+				<th>Prezime</th>
+				<th>Uloga</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	
+	<br/></br>
+	<h4>Pretraga korisnika koji su napravili rezervaciju:</h4>
+	<table>
+		<tr>
+			<td>Korisnicko Ime:</td>
+			<td><input type="text" id="search_kor_ime"></td>
+			<td>Ime:</td>
+			<td><input type="text" id="search_ime"></td>
+			<td>Prezime:</td>
+			<td><input type="text" id="search_prezime"></td>
+			<td>Uloga:</td>
+			<td><input type="text" id="search_uloga"></td>
+			<td><button onclick="search();"> Search</button></td>
+		</tr>
+	</table>
+	
+	<h4>Rezultati pretrage:</h4>
+	<table id="tblPretraga" border=1>
+		<thead>
+			<tr>
+				<th>Korisnicko Ime</th>
+				<th>Ime</th>
+				<th>Prezime</th>
+				<th>Uloga</th>
+			</tr>
+		</thead>
+		<tbody>
+	</table>
 
 </body>
 </html>

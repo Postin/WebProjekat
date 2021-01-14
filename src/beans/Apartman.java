@@ -7,30 +7,46 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class Apartman {
-	private UUID id;
+	private Integer id;
 	private TipApartmana tip;
 	private int brojSoba;
 	private int brojGostiju;
 	private Lokacija lokacija;
 	private ArrayList<LocalDate> datumiZaIzdavanje;
 	private ArrayList<LocalDate> dostupnostPoDatumima;
-	private Korisnik domacin;
+	private String domacin; //korisnicko ime
 	private ArrayList<Komentar> komentari;
 	private ArrayList<Image> slike;
 	private int cenaPoNoci;
 	private LocalTime vremeZaPrijavu;
 	private LocalTime vremeZaOdjavu;
 	private StatusApartmana status;
-	
-	public Apartman() {
-		// TODO Auto-generated constructor stub
-		this.id = UUID.randomUUID();
+	private boolean obrisan;
+		
+	public Apartman(Integer id, TipApartmana tip, int brojSoba, int brojGostiju, Lokacija lok, ArrayList<LocalDate> datumiZaIzdavanje,
+			ArrayList<LocalDate> dostupnostPoDatumima, String domacin, ArrayList<Komentar> komentari,
+			ArrayList<Image> slike, int cenaPoNoci, LocalTime vremeZaPrijavu, LocalTime vremeZaOdjavu, StatusApartmana status) {
+		this.id = id;
+		this.tip = tip;
+		this.brojSoba = brojSoba;
+		this.brojGostiju = brojGostiju;
+		this.lokacija = lok;
+		this.datumiZaIzdavanje = datumiZaIzdavanje;
+		this.dostupnostPoDatumima = dostupnostPoDatumima;
+		this.domacin = domacin;
+		this.komentari = komentari;
+		this.slike = slike;
+		this.cenaPoNoci = cenaPoNoci;
+		this.vremeZaPrijavu = vremeZaPrijavu;
+		this.vremeZaOdjavu = vremeZaOdjavu;
+		this.status = status;
+		this.obrisan = false;		
 	}
 	
-	public UUID getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(UUID id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public TipApartmana getTip() {
@@ -57,10 +73,10 @@ public class Apartman {
 	public void setLokacija(Lokacija lokacija) {
 		this.lokacija = lokacija;
 	}
-	public Korisnik getDomacin() {
+	public String getDomacin() {
 		return domacin;
 	}
-	public void setDomacin(Korisnik domacin) {
+	public void setDomacin(String domacin) {
 		this.domacin = domacin;
 	}
 	public ArrayList<Komentar> getKomentari() {

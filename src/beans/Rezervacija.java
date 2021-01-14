@@ -1,8 +1,10 @@
 package beans;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Rezervacija {
+	private Integer id;
 	private Apartman apartman;
 	private LocalDate pocetniDatum;
 	private int brNocenja;
@@ -11,8 +13,15 @@ public class Rezervacija {
 	private Korisnik gost;
 	private StatusRezervacije status;
 	
-	public Rezervacija() {
-		
+	public Rezervacija(Integer id, Apartman apartman, LocalDate pocetniDatum, int brNocenja, int ukupnaCena, String poruka, Korisnik gost, StatusRezervacije status) {
+		this.id = id;
+		this.apartman = apartman;
+		this.pocetniDatum = pocetniDatum;
+		this.brNocenja = brNocenja;
+		this.ukupnaCena = ukupnaCena;
+		this.poruka = poruka;
+		this.gost = gost;
+		this.status = status;
 	}
 	
 	public Apartman getApartman() {
@@ -56,5 +65,13 @@ public class Rezervacija {
 	}
 	public void setStatus(StatusRezervacije status) {
 		this.status = status;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

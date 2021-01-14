@@ -30,19 +30,8 @@ public class Korisnik {
 		this.rezervacije = new ArrayList<>();
 	}
 	
-	//administrator
-	public Korisnik(UUID id,String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga) {
-		this.id = id;
-		this.korisnickoIme = korisnickoIme;
-		this.lozinka = lozinka;
-		this.ime = ime;
-		this.prezime = prz;
-		this.pol = pol;
-		this.uloga = uloga;
-	}
-	
-	//domacin
-	public Korisnik(UUID id, String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> apartmaniZaIzdavanje) {
+	public Korisnik(UUID id,String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> apartmaniZaIzdavanje,
+			ArrayList<Apartman> iznajmljeni, ArrayList<Rezervacija> rezervacije) {
 		this.id = id;
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
@@ -51,17 +40,6 @@ public class Korisnik {
 		this.pol = pol;
 		this.uloga = uloga;
 		this.apartmaniZaIzdavanje = apartmaniZaIzdavanje;
-	}
-	
-	//gost
-	public Korisnik(UUID id, String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> iznajmljeni, ArrayList<Rezervacija> rezervacije) {
-		this.id = id;
-		this.korisnickoIme = korisnickoIme;
-		this.lozinka = lozinka;
-		this.ime = ime;
-		this.prezime = prz;
-		this.pol = pol;
-		this.uloga = uloga;
 		this.iznajmljeniApartmani = iznajmljeni;
 		this.rezervacije = rezervacije;
 	}
