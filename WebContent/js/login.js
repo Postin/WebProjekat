@@ -2,7 +2,7 @@
 	
 $(document).ready(function() {
 	//ako je korisnik vec ulogovan, redirekcija na index.html
-	if(sessionStorage.getItem("id") != null) {
+	if(sessionStorage.getItem("loggedIn") != null) {
 		//window.location.href = "index.html"; TO DO - otkomentarisati posle, za sada samo smeta
 	}
 });
@@ -21,12 +21,12 @@ function login() {
 		type:'POST',
 		data:JSON.stringify({korisnickoIme,lozinka}),
 		contentType:'application/json',
-		success: function(id) {
-			sessionStorage.setItem("id", id);
+		success: function() {
+			sessionStorage.setItem("loggedIn",korisnickoIme);
 			
 			//redirekcija u odnosu na tip korisnika sa jos jednim $.ajax() pozivom
 			$.ajax({
-				url:'rest/users/uloga/'+sessionStorage.getItem("id"),
+				url:'rest/users/uloga/'+korisnickoIme,
 				type:'GET',
 				success: function(korisnik) {
 					if(korisnik.uloga == 'GOST') {

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Izmeni Licne Podatke</title>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="js/gost.js"></script>
+	
+	<script>
+		$(document).ready(function() {
+			// dovuci podatke za korisnika
+			let korisnickoIme = sessionStorage.getItem("loggedIn");
+			$.ajax({
+				url:'rest/users/get_licni_podaci/'+ korisnickoIme,
+				type:'GET',
+				success: function(data) {
+					//alert(JSON.stringify({data}));
+					popuniLicnePodatke(data);
+				},
+				error: function(e) {
+					alert('error: ',e.message);
+				}
+			})
+		});
+		
+		function popuniLicnePodatke(korisnik) {
+			$('#inputIme').val(korisnik.ime);
+			$('#inputPrezime').val(korisnik.prezime);
+			$('#inputLozinka').val(korisnik.lozinka);
+		}
+
+		
+		function izmeniLicnePodatke() {
+			let ime = $('#inputIme').val();
+			let prezime = $('#inputPrezime').val();
+			let lozinka = $('#inputLozinka').val();
+			let potvrdiLozinku = $('#inputPotvrdiLozinku').val();
+			let korisnickoIme = sessionStorage.getItem("loggedIn");
+			
+			
+			if(lozinka != potvrdiLozinku) {
+				alert('Ne poklapaju se lozinka i potvrda lozinke!');
+				return;
+			}
+			
+			$.ajax({
+				url:'rest/users/put_licni_podaci/'+korisnickoIme,
+				type:'PUT',
+				data: JSON.stringify({ime,prezime,korisnickoIme,lozinka}),
+				contentType:'application/json',
+				success: function() {
+					alert('success');
+				},
+				error: function(e) {
+					alert('error' ,e.message);
+				}
+				
+			});
+		}
+	</script>
+</head>
+<body>
+
+	<h4>Licni Podaci:</h4>
+	<form id='formIzmeniLicnePodatke'>
+		<table style="border:2px solid black">
+			<tr>
+				<td><label for="inputIme">Ime:</label></td>
+				<td><input type="text" id="inputIme"></input></br></td>
+			</tr>
+			<tr>
+				<td><label for="inputPrezime">Prezime:</label></td>
+				<td><input type="text" id="inputPrezime"></input></br></td>
+			</tr>
+			<tr>
+				<td><label for="inputLozinka">Lozinka:</label></td>
+				<td><input type="password" id="inputLozinka"></input></br></td>
+			</tr>
+			<tr>
+				<td><label for="inputPotvrdiLozinku">Potvrdi Lozinku:</label></td>
+				<td><input type="password" id="inputPotvrdiLozinku"></input></br></td>
+			</tr>
+			<tr>
+				<td colspan="1" ><button id="btnIzmeni" onClick="izmeniLicnePodatke()">Izmeni</button></td>
+				<td><a href="gost.html">Vrati se Nazad</a></td>
+			</tr>
+		</table>		
+		
+	</form>
+</body>
+</html>

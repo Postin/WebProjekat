@@ -1,0 +1,35 @@
+{
+	"gost":{
+		"korisnickoIme": "gost",
+		"lozinka": "gost",
+		"ime": "Filip",
+		"prezime": "Vozarevic",
+		"pol": "MUSKO",
+		"uloga":"GOST",
+		"apartmaniZaIzdavanje":[],
+		"iznajmljeniApartmani":[],
+		"rezervacije":[]
+	},
+	"admin":{
+		"korisnickoIme": "admin",
+		"lozinka": "admin",
+		"ime": "Filip",
+		"prezime": "Vozarevic",
+		"pol": "MUSKO",
+		"uloga":"ADMINISTRATOR",
+		"apartmaniZaIzdavanje":[],
+		"iznajmljeniApartmani":[],
+		"rezervacije":[]
+	},
+	"domacin":{
+		"korisnickoIme": "domacin",
+		"lozinka": "domacin",
+		"ime": "Natasa",
+		"prezime": "Mitrovic",
+		"pol": "ZENSKO",
+		"uloga":"DOMACIN",
+		"apartmaniZaIzdavanje":[],
+		"iznajmljeniApartmani":[],
+		"rezervacije":[]
+	}
+}

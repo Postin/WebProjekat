@@ -1,4 +1,4 @@
 function logout() {
-	sessionStorage.removeItem("id");
+	sessionStorage.removeItem("loggedIn");
 	window.location.href = "login.html";
 }

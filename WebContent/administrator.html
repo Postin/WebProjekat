@@ -25,7 +25,7 @@ $(document).ready(function() {
 });
 
 function logout() {
-	sessionStorage.removeItem("id");
+	sessionStorage.removeItem("loggedIn");
 	window.location.href = "login.html";
 }
 
@@ -52,16 +52,16 @@ function addKorisnikSearch(korisnik) {
 }
 
 function search(){
-	let ime = $('#search_kor_ime').val();
-	let prezime = $('#search_ime').val();
-	let korisnickoIme = $('#search_prezime').val();
+	let korisnickoIme = $('#search_kor_ime').val();
+	let ime = $('#search_ime').val();
+	let prezime = $('#search_prezime').val();
 	let uloga = $('#search_uloga').val().toUpperCase(); // zato sto su uloge ADMIN,DOMACIN,GOST
 		
 	$.ajax({
-		url:'rest/users/search_users/'+ uloga,
+		url:'rest/users/search_users',
 		type:'POST',
 		contentType:'application/json',
-		data:JSON.stringify({ime,prezime,korisnickoIme}),
+		data:JSON.stringify({ime,prezime,korisnickoIme,uloga}),
 		success: function(data) {
 			$('#tblPretraga tbody').html('');
 			for(i = 0; i < data.length; i++) {

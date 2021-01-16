@@ -5,22 +5,20 @@ import java.util.UUID;
 
 public class Korisnik {
 	
-	private UUID id;
-	private String korisnickoIme;
+	private String korisnickoIme; // korisnicko ime je jedinstveno
 	private String lozinka;
 	private String ime;
 	private String prezime;
-	private Pol pol;
-	private Uloga uloga;
+	private String pol;
+	private String uloga;
 	private ArrayList<Apartman> apartmaniZaIzdavanje; //ako je korisnik domacin
 	private ArrayList<Apartman> iznajmljeniApartmani; // gost
 	private ArrayList<Rezervacija> rezervacije; // gost
 	
 	public Korisnik() {
 		// TODO Auto-generated constructor stub
-		this.id = UUID.randomUUID();
-		this.uloga = Uloga.GOST;
-		this.pol = Pol.MUSKO;
+		this.uloga = "GOST";
+		this.pol = "MUSKO";
 		this.korisnickoIme = "";
 		this.lozinka = "";
 		this.ime = "";
@@ -30,9 +28,8 @@ public class Korisnik {
 		this.rezervacije = new ArrayList<>();
 	}
 	
-	public Korisnik(UUID id,String korisnickoIme, String lozinka, String ime, String prz, Pol pol, Uloga uloga, ArrayList<Apartman> apartmaniZaIzdavanje,
+	public Korisnik(String korisnickoIme, String lozinka, String ime, String prz, String pol, String uloga, ArrayList<Apartman> apartmaniZaIzdavanje,
 			ArrayList<Apartman> iznajmljeni, ArrayList<Rezervacija> rezervacije) {
-		this.id = id;
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.ime = ime;
@@ -68,23 +65,17 @@ public class Korisnik {
 	public void setPrezime(String prezime) {
 		this.prezime = prezime;
 	}
-	public Pol getPol() {
+	public String getPol() {
 		return pol;
 	}
-	public void setPol(Pol pol) {
+	public void setPol(String pol) {
 		this.pol = pol;
 	}
-	public Uloga getUloga() {
+	public String getUloga() {
 		return uloga;
 	}
-	public void setUloga(Uloga uloga) {
+	public void setUloga(String uloga) {
 		this.uloga = uloga;
-	}
-	public UUID getId() {
-		return id;
-	}
-	public void setId(UUID id) {
-		this.id = id;
 	}
 	public ArrayList<Apartman> getApartmaniZaIzdavanje() {
 		return apartmaniZaIzdavanje;

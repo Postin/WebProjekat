@@ -8,15 +8,15 @@
 
 <script>
 function logout() {
-	sessionStorage.removeItem("id");
+	sessionStorage.removeItem("loggedIn");
 	window.location.href = "login.html";
 }
 
 $(document).ready(function() {
 	// dovuci podatke za korisnika
-	let id = sessionStorage.getItem("id");
+	let korisnickoIme = sessionStorage.getItem("loggedIn");
 	$.ajax({
-		url:'rest/users/get_all_gosti/' + id,
+		url:'rest/users/get_all_gosti/' + korisnickoIme,
 		type:'GET',
 		success: function(data) {
 			$('#tblKorisnici tbody').html('');

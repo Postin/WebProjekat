@@ -2,7 +2,6 @@ package services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -33,8 +32,11 @@ public class KorisnikService {
 	
 	@PostConstruct
 	public void init() {
+		String path = ctx.getRealPath("");
+		//System.out.println(path);
+		
 		if(ctx.getAttribute("korisnikDAO")==null) {
-			ctx.setAttribute("korisnikDAO", new KorisnikDAO());
+			ctx.setAttribute("korisnikDAO", new KorisnikDAO(path));
 		}
 		
 		if(ctx.getAttribute("apartmanDAO") == null) {
@@ -59,14 +61,14 @@ public class KorisnikService {
 			System.out.println("Korisnik je vec zapisan u sistemu!");
 			return Response.status(400).build();			
 		}
-		
-		user.setId(UUID.randomUUID());
 		korisnici.addUser(user);
 		
 		ctx.setAttribute("korisnikDAO", korisnici);
+		
+		String contextPath = ctx.getRealPath("");
+		korisnici.saveUsers(contextPath);
 		System.out.println("Uspesna registracija!");
 		return Response.status(200).build();
-		
 	}
 	
 	
@@ -74,62 +76,61 @@ public class KorisnikService {
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public UUID login(Korisnik user, @Context HttpServletRequest request) {
+	public Response login(Korisnik user, @Context HttpServletRequest request) {
 		System.out.println(user.getKorisnickoIme());
 		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
 		Korisnik k = korisnici.findUser(user);
 		
 		if(k == null) {
 			System.out.println("Greska, korisnik ne postoji u sistemu!");
-			return null;
-			//return Response.status(401).build();	
+			//return null;
+			return Response.status(401).build();	
 		}
 		
 		ctx.setAttribute("korisnikDAO", korisnici);
-		request.getSession().setAttribute("user", k);
+		request.getSession().setAttribute("loggedUser", k);
 		System.out.println("Uspesan login!");
-		return k.getId();
+		return Response.status(200).build();
 		//return Response.status(200).build();	
 		
 	}
 	
 	@GET
-	@Path("/uloga/{id}")
+	@Path("/uloga/{korisnickoIme}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Korisnik getUloga(@PathParam("id") Integer id) {
-		System.out.println(id);
+	public Korisnik getUloga(@PathParam("korisnickoIme") String korisnickoIme) {
+		System.out.println(korisnickoIme);
 		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
-		Korisnik k = korisnici.findUser(id);
+		Korisnik k = korisnici.findUser(korisnickoIme);
 		if(k == null) {
-			System.out.println("Nije nadjen korisnik na osnovu ID-a");
+			System.out.println("Nije nadjen korisnik na osnovu korisnickog imena-a");
 			return null;
 		}
 		return k;
 	}
 	
 	@GET
-	@Path("/get_licni_podaci/{id}")
+	@Path("/get_licni_podaci/{korisnickoIme}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Korisnik getLicniPodaci(@PathParam("id") Integer id) {
+	public Korisnik getLicniPodaci(@PathParam("korisnickoIme") String korisnickoIme) {
 		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
-		Korisnik k = korisnici.findUser(id);
+		Korisnik k = korisnici.findUser(korisnickoIme);
 		
 		return k;
 	}
 	
 	@PUT
-	@Path("/put_licni_podaci/{id}")
+	@Path("/put_licni_podaci/{korisnickoIme}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response izmeniLicnePodatke(@PathParam("id") Integer id, Korisnik user) {
+	public Response izmeniLicnePodatke(@PathParam("korisnickoIme") String korisnickoIme, Korisnik user) {
 		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
-		Korisnik k = korisnici.findUser(id);
+		Korisnik k = korisnici.findUser(korisnickoIme);
 		
 		k.setIme(user.getIme());
 		k.setPrezime(user.getPrezime());
-		k.setKorisnickoIme(user.getKorisnickoIme());
 		k.setLozinka(user.getLozinka());
 		
 		ctx.setAttribute("korisnikDAO", korisnici);
@@ -154,22 +155,21 @@ public class KorisnikService {
 	}
 	
 	@POST
-	@Path("/search_users/{uloga}")
+	@Path("/search_users")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON) // uloga je pathparam jer enum izbacuje gresku ako ne pise striktno ADMIN,GOST,DOMACIN, pa je ideja
-	public ArrayList<Korisnik> searchUsers(Korisnik k, @PathParam("uloga") String uloga) { // da ga poredimo kao string
-		System.out.println("usao");
+	@Produces(MediaType.APPLICATION_JSON) 
+	public ArrayList<Korisnik> searchUsers(Korisnik k) {
+		System.out.println("usao u searchUsers");
 		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
-		
-		
-		
+
+		//System.out.println("KORIME: "+ k.getKorisnickoIme() + " IME: " + k.getIme()+ " PRZ: " + k.getPrezime() + " ULOGA: " + k.getUloga());
 		ArrayList<Korisnik> users = new ArrayList<Korisnik>();
 		for(Korisnik kor : korisnici.getKorisnici().values()) {
 			if(kor.getIme().contains(k.getIme()) && kor.getPrezime().contains(k.getPrezime()) &&
-					kor.getKorisnickoIme().contains(k.getKorisnickoIme()) && kor.getUloga().toString().contains(uloga)) {
+					kor.getKorisnickoIme().contains(k.getKorisnickoIme()) && kor.getUloga().contains(k.getUloga())) {
 				users.add(kor);
 				
-				System.out.println(kor.getIme());
+				System.out.println(kor.getKorisnickoIme());
 			}
 		}
 		
@@ -177,10 +177,10 @@ public class KorisnikService {
 	}
 	
 	@GET
-	@Path("/get_all_gosti/{id}")
+	@Path("/get_all_gosti/{korisnickoIme}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON) 
-	public ArrayList<Korisnik> getAllGosti(@Context HttpServletRequest request, @PathParam("id") Integer id) {
+	public ArrayList<Korisnik> getAllGosti(@Context HttpServletRequest request, @PathParam("korisnickoIme") String korisnickoIme) {
 		ArrayList<Korisnik> gosti = new ArrayList<Korisnik>();
 		RezervacijaDAO rezervacije = (RezervacijaDAO)ctx.getAttribute("rezervacijaDAO");
 		
@@ -188,13 +188,13 @@ public class KorisnikService {
 		//Korisnik ulogovan = (Korisnik)request.getSession().getAttribute("user");
 		
 		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
-		HashMap<UUID,Korisnik> svi = korisnici.getKorisnici();
+		HashMap<String,Korisnik> svi = korisnici.getKorisnici();
 		
 		for(Korisnik k : svi.values()) {
-			System.out.println("KORISNIK: " + k.getKorisnickoIme() + " ,ID: " + k.getId());
+			System.out.println("KORISNIK: " + k.getKorisnickoIme());
 		}
 		
-		System.out.println("ULOGOVAN: "+id);
+		System.out.println("ULOGOVAN: "+korisnickoIme);
 		
 		for(Rezervacija r: rezervacije.getRezervacije().values()) {
 			//System.out.println(r.getApartman().getDomacin().getId());
