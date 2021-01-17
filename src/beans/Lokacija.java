@@ -1,9 +1,7 @@
 package beans;
 
-import java.util.UUID;
 
 public class Lokacija {
-	private UUID id;
 	private double geoSirina;
 	private double geoDuzina;
 	private Adresa adresa;
@@ -13,7 +11,6 @@ public class Lokacija {
 	}
 	
 	public Lokacija(double geoSirina, double geoDuzina, Adresa adresa) {
-		this.id = UUID.randomUUID();
 		this.geoSirina = geoSirina;
 		this.geoDuzina = geoDuzina;
 		this.adresa = adresa;
@@ -38,14 +35,6 @@ public class Lokacija {
 	}
 	public void setAdresa(Adresa adresa) {
 		this.adresa = adresa;
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
 	}
 	
 }

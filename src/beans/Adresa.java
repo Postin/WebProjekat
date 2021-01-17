@@ -1,9 +1,7 @@
 package beans;
 
-import java.util.UUID;
 
 public class Adresa {
-	private Integer id;
 	private String ulicaIbr;
 	private String mesto;
 	private int postanskiBr;
@@ -37,13 +35,5 @@ public class Adresa {
 	}
 	public void setPostanskiBr(int postanskiBr) {
 		this.postanskiBr = postanskiBr;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 }
