@@ -1,7 +1,6 @@
 package beans;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Korisnik {
 	
@@ -16,7 +15,6 @@ public class Korisnik {
 	private ArrayList<Rezervacija> rezervacije; // gost
 	
 	public Korisnik() {
-		// TODO Auto-generated constructor stub
 		this.uloga = "GOST";
 		this.pol = "MUSKO";
 		this.korisnickoIme = "";

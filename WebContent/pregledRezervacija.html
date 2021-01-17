@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="js/admin.js"></script>
+<script>
+
+function logout() {
+	sessionStorage.removeItem("loggedIn");
+	window.location.href = "login.html";
+}
+
+$(document).ready(function() {
+	// dovuci podatke za korisnika
+	let korisnickoIme = sessionStorage.getSession("loggedIn");
+	$.ajax({
+		url:'rest/rezervacija/get_rezervacije/'+korisnickoIme,
+		type:'GET',
+		success: function(data) {
+			$('#tblKorisnici tbody').html('');
+			for(i = 0; i < data.length; i++) {
+				addKorisnik(data[i]);
+			}
+		},
+		error: function(e) {
+			alert('error: ',e.message);
+		}
+	})
+});
+
+</script>
+<title>Pregled Rezervacija</title>
+</head>
+<body>
+
+	<a href="#" onclick="logout();">Logout</a>
+		<h4>Pregled Rezervacija: </h4>
+		<table id="tblKorisnici" border="1">
+			<thead>
+				<tr>
+					<th>Korisnicko Ime</th>
+					<th>Ime</th>
+					<th>Prezime</th>
+					<th>Uloga</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+
+</body>
+</html>

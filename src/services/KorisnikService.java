@@ -28,6 +28,7 @@ import dao.RezervacijaDAO;
 public class KorisnikService {
 	
 	//TODO uraditi logout na serveru.
+	//TODO prebaciti svuda return u tip Response.
 	
 	@Context
 	ServletContext ctx;
@@ -180,7 +181,7 @@ public class KorisnikService {
 	@GET
 	@Path("/get_all_gosti/{korisnickoIme}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON) //TODO request za autorizaciju.
+	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Korisnik> getAllGosti(@Context HttpServletRequest request, @PathParam("korisnickoIme") String korisnickoIme) {
 		ArrayList<Korisnik> gosti = new ArrayList<Korisnik>();
 		RezervacijaDAO rezervacije = (RezervacijaDAO)ctx.getAttribute("rezervacijaDAO");
