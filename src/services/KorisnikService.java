@@ -38,11 +38,7 @@ public class KorisnikService {
 		if(ctx.getAttribute("korisnikDAO")==null) {
 			ctx.setAttribute("korisnikDAO", new KorisnikDAO(path));
 		}
-		
-		if(ctx.getAttribute("apartmanDAO") == null) {
-			ctx.setAttribute("apartmanDAO", new ApartmanDAO());
-		}
-		
+
 		if(ctx.getAttribute("rezervacijaDAO") == null) {
 			ctx.setAttribute("rezervacijaDAO", new RezervacijaDAO());
 		}

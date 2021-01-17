@@ -3,7 +3,7 @@ package beans;
 import java.util.UUID;
 
 public class Lokacija {
-	private UUID id;
+	private Integer id;
 	private double geoSirina;
 	private double geoDuzina;
 	private Adresa adresa;
@@ -12,11 +12,12 @@ public class Lokacija {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Lokacija(double geoSirina, double geoDuzina, Adresa adresa) {
-		this.id = UUID.randomUUID();
+	public Lokacija(Integer id, double geoSirina, double geoDuzina, Adresa adresa) {
+	//	this.id = UUID.randomUUID();
 		this.geoSirina = geoSirina;
 		this.geoDuzina = geoDuzina;
 		this.adresa = adresa;
+		this.id = id;
 	}
 	
 	public double getGeoDuzina() {
@@ -40,12 +41,20 @@ public class Lokacija {
 		this.adresa = adresa;
 	}
 
-	public UUID getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	@Override
+	public String toString() {
+		return "Lokacija [id=" + id + ", geoSirina=" + geoSirina + ", geoDuzina=" + geoDuzina + ", adresa=" + adresa
+				+ "]";
+	}
+	
+	
 	
 }

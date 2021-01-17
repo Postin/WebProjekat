@@ -13,6 +13,10 @@ public class Rezervacija {
 	private Korisnik gost;
 	private StatusRezervacije status;
 	
+	public Rezervacija() {
+		super();
+	}
+	
 	public Rezervacija(Integer id, Apartman apartman, LocalDate pocetniDatum, int brNocenja, int ukupnaCena, String poruka, Korisnik gost, StatusRezervacije status) {
 		this.id = id;
 		this.apartman = apartman;
@@ -74,4 +78,13 @@ public class Rezervacija {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	@Override
+	public String toString() {
+		return "Rezervacija [id=" + id + ", apartman=" + apartman + ", pocetniDatum=" + pocetniDatum + ", brNocenja="
+				+ brNocenja + ", ukupnaCena=" + ukupnaCena + ", poruka=" + poruka + ", gost=" + gost + ", status="
+				+ status + "]";
+	}
+	
+	
 }

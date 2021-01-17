@@ -1,32 +1,38 @@
 package beans;
 
-import java.awt.Image;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Apartman {
 	private Integer id;
+	private String ime;
 	private TipApartmana tip;
 	private int brojSoba;
 	private int brojGostiju;
 	private Lokacija lokacija;
-	private ArrayList<LocalDate> datumiZaIzdavanje;
-	private ArrayList<LocalDate> dostupnostPoDatumima;
+	private ArrayList<LocalDate> datumiZaIzdavanje = new ArrayList<LocalDate>();
+	private ArrayList<LocalDate> dostupnostPoDatumima = new ArrayList<LocalDate>();
 	private String domacin; //korisnicko ime
-	private ArrayList<Komentar> komentari;
-	private ArrayList<Image> slike;
+	private ArrayList<Komentar> komentari = new ArrayList<Komentar>();
+	private ArrayList<String> slike = new ArrayList<String>();
 	private int cenaPoNoci;
-	private LocalTime vremeZaPrijavu;
-	private LocalTime vremeZaOdjavu;
-	private StatusApartmana status;
+	private LocalTime vremeZaPrijavu = LocalTime.of(14,0,0,0);
+	private LocalTime vremeZaOdjavu = LocalTime.of(10,0,0,0);
+	private boolean aktivan=true;
 	private boolean obrisan;
+	private ArrayList<SadrzajApartmana> sadrzaj = new ArrayList<SadrzajApartmana>();
+	private ArrayList<Rezervacija> rezervacija = new ArrayList<Rezervacija>();
+	
+	public Apartman() {
+		super();
+	}
 		
-	public Apartman(Integer id, TipApartmana tip, int brojSoba, int brojGostiju, Lokacija lok, ArrayList<LocalDate> datumiZaIzdavanje,
+	public Apartman(Integer id,String ime, TipApartmana tip, int brojSoba, int brojGostiju, Lokacija lok, ArrayList<LocalDate> datumiZaIzdavanje,
 			ArrayList<LocalDate> dostupnostPoDatumima, String domacin, ArrayList<Komentar> komentari,
-			ArrayList<Image> slike, int cenaPoNoci, LocalTime vremeZaPrijavu, LocalTime vremeZaOdjavu, StatusApartmana status) {
+			ArrayList<String> slike, int cenaPoNoci, LocalTime vremeZaPrijavu, LocalTime vremeZaOdjavu, boolean aktivan,ArrayList<SadrzajApartmana>sadrzaj,ArrayList<Rezervacija>rezervacija) {
 		this.id = id;
+		this.ime = ime;
 		this.tip = tip;
 		this.brojSoba = brojSoba;
 		this.brojGostiju = brojGostiju;
@@ -39,8 +45,10 @@ public class Apartman {
 		this.cenaPoNoci = cenaPoNoci;
 		this.vremeZaPrijavu = vremeZaPrijavu;
 		this.vremeZaOdjavu = vremeZaOdjavu;
-		this.status = status;
-		this.obrisan = false;		
+		this.aktivan = aktivan;
+		this.obrisan = false;
+		this.sadrzaj = sadrzaj;
+		this.rezervacija = rezervacija;
 	}
 	
 	public Integer getId() {
@@ -49,6 +57,23 @@ public class Apartman {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	public String getIme() {
+		return ime;
+	}
+
+	public void setIme(String ime) {
+		this.ime = ime;
+	}
+
+	public boolean isObrisan() {
+		return obrisan;
+	}
+
+	public void setObrisan(boolean obrisan) {
+		this.obrisan = obrisan;
+	}
+
 	public TipApartmana getTip() {
 		return tip;
 	}
@@ -85,10 +110,10 @@ public class Apartman {
 	public void setKomentari(ArrayList<Komentar> komentari) {
 		this.komentari = komentari;
 	}
-	public ArrayList<Image> getSlike() {
+	public ArrayList<String> getSlike() {
 		return slike;
 	}
-	public void setSlike(ArrayList<Image> slike) {
+	public void setSlike(ArrayList<String> slike) {
 		this.slike = slike;
 	}
 	public int getCenaPoNoci() {
@@ -109,11 +134,11 @@ public class Apartman {
 	public void setVremeZaOdjavu(LocalTime vremeZaOdjavu) {
 		this.vremeZaOdjavu = vremeZaOdjavu;
 	}
-	public StatusApartmana getStatus() {
-		return status;
+	public boolean isAktivan() {
+		return aktivan;
 	}
-	public void setStatus(StatusApartmana status) {
-		this.status = status;
+	public void setAktivan(boolean status) {
+		this.aktivan = status;
 	}
 	public ArrayList<LocalDate> getDatumiZaIzdavanje() {
 		return datumiZaIzdavanje;
@@ -126,6 +151,27 @@ public class Apartman {
 	}
 	public void setDostupnostPoDatumima(ArrayList<LocalDate> dostupnostPoDatumima) {
 		this.dostupnostPoDatumima = dostupnostPoDatumima;
+	}
+	public ArrayList<SadrzajApartmana> getSadrzaj() {
+		return sadrzaj;
+	}
+	public void setSadrzaj(ArrayList<SadrzajApartmana> sadrzaj) {
+		this.sadrzaj = sadrzaj;
+	}
+	public ArrayList<Rezervacija> getRezervacija() {
+		return rezervacija;
+	}
+	public void setRezervacija(ArrayList<Rezervacija> rezervacija) {
+		this.rezervacija = rezervacija;
+	}
+	
+	@Override
+	public String toString() {
+		return "Apartman [id=" + id + ", ime=" + ime + ", tip=" + tip + ", brojSoba=" + brojSoba + ", brojGostiju=" + brojGostiju
+				+ ", lokacija=" + lokacija + ", datumiZaIzdavanje=" + datumiZaIzdavanje + ", dostupnostPoDatumima="
+				+ dostupnostPoDatumima + ", domacin=" + domacin + ", cenaPoNoci=" + cenaPoNoci + ", vremeZaPrijavu="
+				+ vremeZaPrijavu + ", vremeZaOdjavu=" + vremeZaOdjavu + ", status=" + aktivan + ", sadrzaj=" + sadrzaj
+				+ ", rezervacija=" + rezervacija + "]";
 	}
 	
 	

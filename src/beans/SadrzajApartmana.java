@@ -3,23 +3,28 @@ package beans;
 import java.util.UUID;
 
 public class SadrzajApartmana {
-	private UUID id = UUID.randomUUID();
+	//private UUID id = UUID.randomUUID();
+	private Integer id;
 	private String naziv;
+	private boolean obrisan;
 	
 	public SadrzajApartmana() {
+		super();
+		this.setObrisan(false);
 		
 	}
 	
-	public SadrzajApartmana(String naziv) {
-		this.id = UUID.randomUUID();
+	public SadrzajApartmana(Integer id, String naziv) {
+		this.id = id;
 		this.naziv = naziv;
+		this.setObrisan(false);
 	}
 
-	public UUID getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -30,4 +35,20 @@ public class SadrzajApartmana {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
+
+	public boolean isObrisan() {
+		return obrisan;
+	}
+
+	public void setObrisan(boolean obrisan) {
+		this.obrisan = obrisan;
+	}
+
+	@Override
+	public String toString() {
+		return "SadrzajApartmana [id=" + id + ", naziv=" + naziv + "]";
+	}
+	
+	
+	
 }
