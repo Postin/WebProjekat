@@ -1,21 +1,25 @@
 package beans;
 
-import java.time.LocalDate;
-import java.util.UUID;
+
+import java.util.Date;
 
 public class Rezervacija {
 	private Integer id;
-	private Apartman apartman;
-	private LocalDate pocetniDatum;
+	private Integer apartmanId;
+	private Date pocetniDatum;
 	private int brNocenja;
 	private int ukupnaCena;
 	private String poruka;
-	private Korisnik gost;
-	private StatusRezervacije status;
+	private String gost; //korisnicko Ime
+	private String status; // KREIRANA,ODBIJENA,ODUSTANAK,PRIHVACENA,ZAVRSENA
 	
-	public Rezervacija(Integer id, Apartman apartman, LocalDate pocetniDatum, int brNocenja, int ukupnaCena, String poruka, Korisnik gost, StatusRezervacije status) {
+	public Rezervacija() {
+		super();
+	}
+	
+	public Rezervacija(Integer id, Integer apartmanId, Date pocetniDatum, int brNocenja, int ukupnaCena, String poruka, String gost, String status) {
 		this.id = id;
-		this.apartman = apartman;
+		this.apartmanId = apartmanId;
 		this.pocetniDatum = pocetniDatum;
 		this.brNocenja = brNocenja;
 		this.ukupnaCena = ukupnaCena;
@@ -24,16 +28,16 @@ public class Rezervacija {
 		this.status = status;
 	}
 	
-	public Apartman getApartman() {
-		return apartman;
+	public Integer getApartmanId() {
+		return apartmanId;
 	}
-	public void setApartman(Apartman apartman) {
-		this.apartman = apartman;
+	public void setApartman(Integer apartman) {
+		this.apartmanId = apartman;
 	}
-	public LocalDate getPocetniDatum() {
+	public Date getPocetniDatum() {
 		return pocetniDatum;
 	}
-	public void setPocetniDatum(LocalDate pocetniDatum) {
+	public void setPocetniDatum(Date pocetniDatum) {
 		this.pocetniDatum = pocetniDatum;
 	}
 	public int getBrNocenja() {
@@ -54,16 +58,16 @@ public class Rezervacija {
 	public void setPoruka(String poruka) {
 		this.poruka = poruka;
 	}
-	public Korisnik getGost() {
+	public String getGost() {
 		return gost;
 	}
-	public void setGost(Korisnik gost) {
+	public void setGost(String gost) {
 		this.gost = gost;
 	}
-	public StatusRezervacije getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(StatusRezervacije status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

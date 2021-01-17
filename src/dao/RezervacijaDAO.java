@@ -1,8 +1,15 @@
 package dao;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Apartman;
 import beans.Korisnik;
@@ -12,13 +19,33 @@ import beans.StatusRezervacije;
 public class RezervacijaDAO {
 	private HashMap<Integer, Rezervacija> rezervacije = new HashMap<Integer,Rezervacija>();
 	
-	public RezervacijaDAO() {
-		UUID id1 = UUID.randomUUID();
-		UUID id2 = UUID.randomUUID();
-		
-		
+	public RezervacijaDAO(String path) {		
+		loadRezervacije(path);
 		//rezervacije.put(id1, new Rezervacija(id1,a1,null,3,6000, "Dobar Dan!",gost1, StatusRezervacije.KREIRANA));
 		//rezervacije.put(id2, new Rezervacija(id2,a2,null,15,30000,"Postovani!",gost2,StatusRezervacije.PRIHVACENA));
+	}
+	
+	public void loadRezervacije(String path) {
+		BufferedReader in = null;
+		try {
+			File file = new File(path + "/data/reservations.json");
+			in = new BufferedReader(new FileReader(file));
+			String line;
+			StringBuilder sb = new StringBuilder();
+			while ((line = in.readLine()) != null) {
+				sb.append(line);
+			}
+			ObjectMapper mapper = new ObjectMapper();
+			this.rezervacije = mapper.readValue(sb.toString(), new TypeReference<Map<Integer, Rezervacija>>(){});
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (Exception e) {}
+			}
+		}
 	}
 	
 	public Rezervacija findRezervacija(Rezervacija rez) {

@@ -41,7 +41,41 @@ function addKorisnik(korisnik) {
 	$('#tblKorisnici tbody').append(tr);
 }
 
+function addKorisnikSearch(korisnik) {
+	let tr = $('<tr></tr>');
+	let tdKorIme = $('<td>'+korisnik.korisnickoIme+'</td>');
+	let tdIme = $('<td>'+korisnik.ime+'</td>');
+	let tdPrezime = $('<td>'+korisnik.prezime+'</td>');
+	let tdUloga = $('<td>'+korisnik.uloga+'</td>');
+	
+	tr.append(tdKorIme).append(tdIme).append(tdPrezime).append(tdUloga);
+	$('#tblPretraga tbody').append(tr);
+}
 
+function search(){
+	let korisnickoIme = $('#search_kor_ime').val();
+	let ime = $('#search_ime').val();
+	let prezime = $('#search_prezime').val();
+	let uloga = $('#search_uloga').val().toUpperCase(); // zato sto su uloge ADMIN,DOMACIN,GOST
+		
+	let loggedIn = sessionStorage.getItem("loggedIn");
+	
+	$.ajax({
+		url:'rest/users/search_gosti/'+ loggedIn,
+		type:'POST',
+		contentType:'application/json',
+		data:JSON.stringify({ime,prezime,korisnickoIme,uloga}),
+		success: function(data) {
+			$('#tblPretraga tbody').html('');
+			for(i = 0; i < data.length; i++) {
+				addKorisnikSearch(data[i]);
+			}
+		},
+		error: function(e) {
+			alert('error');
+		}
+	});
+}
 </script>
 </head>
 <body>

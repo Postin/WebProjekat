@@ -27,6 +27,8 @@ import dao.RezervacijaDAO;
 @Path("users")
 public class KorisnikService {
 	
+	//TODO uraditi logout na serveru.
+	
 	@Context
 	ServletContext ctx;
 	
@@ -40,11 +42,11 @@ public class KorisnikService {
 		}
 		
 		if(ctx.getAttribute("apartmanDAO") == null) {
-			ctx.setAttribute("apartmanDAO", new ApartmanDAO());
+			ctx.setAttribute("apartmanDAO", new ApartmanDAO(path));
 		}
 		
 		if(ctx.getAttribute("rezervacijaDAO") == null) {
-			ctx.setAttribute("rezervacijaDAO", new RezervacijaDAO());
+			ctx.setAttribute("rezervacijaDAO", new RezervacijaDAO(path));
 		}
 	}
 	
@@ -92,7 +94,6 @@ public class KorisnikService {
 		System.out.println("Uspesan login!");
 		return Response.status(200).build();
 		//return Response.status(200).build();	
-		
 	}
 	
 	@GET
@@ -179,34 +180,42 @@ public class KorisnikService {
 	@GET
 	@Path("/get_all_gosti/{korisnickoIme}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON) 
+	@Produces(MediaType.APPLICATION_JSON) //TODO request za autorizaciju.
 	public ArrayList<Korisnik> getAllGosti(@Context HttpServletRequest request, @PathParam("korisnickoIme") String korisnickoIme) {
 		ArrayList<Korisnik> gosti = new ArrayList<Korisnik>();
 		RezervacijaDAO rezervacije = (RezervacijaDAO)ctx.getAttribute("rezervacijaDAO");
-		
-		 // iz nekog razloga id koji je sacuvan, nije isti kao id koji je prosledjen na front.
-		//Korisnik ulogovan = (Korisnik)request.getSession().getAttribute("user");
-		
+		ApartmanDAO apartmani = (ApartmanDAO)ctx.getAttribute("apartmanDAO");
+				
 		KorisnikDAO korisnici = (KorisnikDAO)ctx.getAttribute("korisnikDAO");
 		HashMap<String,Korisnik> svi = korisnici.getKorisnici();
 		
-		for(Korisnik k : svi.values()) {
-			System.out.println("KORISNIK: " + k.getKorisnickoIme());
-		}
-		
-		System.out.println("ULOGOVAN: "+korisnickoIme);
-		
 		for(Rezervacija r: rezervacije.getRezervacije().values()) {
-			//System.out.println(r.getApartman().getDomacin().getId());
-			//if(r.getApartman().getDomacin().getId().equals(id)) {
-				
-			//	  if(!gosti.contains(r.getGost())) {
-					  gosti.add(r.getGost());
-					  
-			//	  }				 
-			//}
-		}
-		
+			String domacin = apartmani.findApartman(r.getApartmanId()).getDomacin(); //nadjem domacina
+			
+			if(domacin.equals(korisnickoIme)) {
+				if(!gosti.contains(korisnici.findUser(korisnickoIme))) {
+					gosti.add(korisnici.findUser(r.getGost()));
+				}
+			}
+		}		
 		return gosti;		
 	}
+	
+	@POST
+	@Path("/search_gosti/{korisnickoIme}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Korisnik> searchGosti(@Context HttpServletRequest request, @PathParam("korisnickoIme") String korisnickoIme, Korisnik user) {
+		ArrayList<Korisnik> gosti = getAllGosti(request, korisnickoIme);
+		ArrayList<Korisnik> rez = new ArrayList<Korisnik>();
+		for(Korisnik k: gosti) {
+			if(k.getIme().contains(user.getIme()) && k.getPrezime().contains(user.getPrezime())
+					&& k.getKorisnickoIme().contains(user.getKorisnickoIme()) && k.getUloga().contains(user.getUloga())) {
+				rez.add(k);
+			}
+		}
+		return rez;
+	}
+	
+	
 }

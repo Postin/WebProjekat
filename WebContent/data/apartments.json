@@ -1,0 +1,28 @@
+{
+  "1" : {
+    "id" : 1,
+    "tip" : "soba",
+    "brojSoba" : 2,
+    "brojGostiju" : 2,
+    "lokacija" : {
+      "geoSirina" : 45.014,
+      "geoDuzina" : 19.821,
+      "adresa" : {
+        "ulicaIbr" : "Strazilovska 16",
+        "mesto" : "Novi Sad",
+        "postanskiBr" : 21000
+      }
+    },
+    "datumiZaIzdavanje" : [ ],
+    "dostupnostPoDatumima" : [ ],
+    "domacin" : "domacin",
+    "komentari" : [ ],
+    "slike" : [ ],
+    "cenaPoNoci" : 50.0,
+    "vremeZaPrijavu" : "14:00",
+    "vremeZaOdjavu" : "10:00",
+    "status" : "aktivan",
+    "sadrzaji" : [ ],
+    "rezervacije" : [ ]
+  }
+}

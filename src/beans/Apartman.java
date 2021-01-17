@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class Apartman {
 	private Integer id;
-	private TipApartmana tip;
+	private String tip; // CEO, SOBA
 	private int brojSoba;
 	private int brojGostiju;
 	private Lokacija lokacija;
@@ -16,16 +16,22 @@ public class Apartman {
 	private ArrayList<LocalDate> dostupnostPoDatumima;
 	private String domacin; //korisnicko ime
 	private ArrayList<Komentar> komentari;
-	private ArrayList<Image> slike;
+	private ArrayList<String> slike;
 	private int cenaPoNoci;
-	private LocalTime vremeZaPrijavu;
-	private LocalTime vremeZaOdjavu;
-	private StatusApartmana status;
+	private String vremeZaPrijavu;
+	private String vremeZaOdjavu;
+	private String status;
+	private ArrayList<Integer> sadrzaji;
+	private ArrayList<Integer> rezervacije;
 	private boolean obrisan;
+	
+	public Apartman() {
+		super();
+	}
 		
-	public Apartman(Integer id, TipApartmana tip, int brojSoba, int brojGostiju, Lokacija lok, ArrayList<LocalDate> datumiZaIzdavanje,
+	public Apartman(Integer id, String tip, int brojSoba, int brojGostiju, Lokacija lok, ArrayList<LocalDate> datumiZaIzdavanje,
 			ArrayList<LocalDate> dostupnostPoDatumima, String domacin, ArrayList<Komentar> komentari,
-			ArrayList<Image> slike, int cenaPoNoci, LocalTime vremeZaPrijavu, LocalTime vremeZaOdjavu, StatusApartmana status) {
+			ArrayList<String> slike, int cenaPoNoci, String vremeZaPrijavu, String vremeZaOdjavu, String status, ArrayList<Integer> sadrzaji) {
 		this.id = id;
 		this.tip = tip;
 		this.brojSoba = brojSoba;
@@ -40,7 +46,8 @@ public class Apartman {
 		this.vremeZaPrijavu = vremeZaPrijavu;
 		this.vremeZaOdjavu = vremeZaOdjavu;
 		this.status = status;
-		this.obrisan = false;		
+		this.sadrzaji = sadrzaji;
+		this.setObrisan(false);		
 	}
 	
 	public Integer getId() {
@@ -49,10 +56,10 @@ public class Apartman {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public TipApartmana getTip() {
+	public String getTip() {
 		return tip;
 	}
-	public void setTip(TipApartmana tip) {
+	public void setTip(String tip) {
 		this.tip = tip;
 	}
 	public int getBrojSoba() {
@@ -85,10 +92,10 @@ public class Apartman {
 	public void setKomentari(ArrayList<Komentar> komentari) {
 		this.komentari = komentari;
 	}
-	public ArrayList<Image> getSlike() {
+	public ArrayList<String> getSlike() {
 		return slike;
 	}
-	public void setSlike(ArrayList<Image> slike) {
+	public void setSlike(ArrayList<String> slike) {
 		this.slike = slike;
 	}
 	public int getCenaPoNoci() {
@@ -97,22 +104,22 @@ public class Apartman {
 	public void setCenaPoNoci(int cenaPoNoci) {
 		this.cenaPoNoci = cenaPoNoci;
 	}
-	public LocalTime getVremeZaPrijavu() {
+	public String getVremeZaPrijavu() {
 		return vremeZaPrijavu;
 	}
-	public void setVremeZaPrijavu(LocalTime vremeZaPrijavu) {
+	public void setVremeZaPrijavu(String vremeZaPrijavu) {
 		this.vremeZaPrijavu = vremeZaPrijavu;
 	}
-	public LocalTime getVremeZaOdjavu() {
+	public String getVremeZaOdjavu() {
 		return vremeZaOdjavu;
 	}
-	public void setVremeZaOdjavu(LocalTime vremeZaOdjavu) {
+	public void setVremeZaOdjavu(String vremeZaOdjavu) {
 		this.vremeZaOdjavu = vremeZaOdjavu;
 	}
-	public StatusApartmana getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(StatusApartmana status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	public ArrayList<LocalDate> getDatumiZaIzdavanje() {
@@ -126,6 +133,30 @@ public class Apartman {
 	}
 	public void setDostupnostPoDatumima(ArrayList<LocalDate> dostupnostPoDatumima) {
 		this.dostupnostPoDatumima = dostupnostPoDatumima;
+	}
+
+	public ArrayList<Integer> getSadrzaji() {
+		return sadrzaji;
+	}
+
+	public void setSadrzaji(ArrayList<Integer> sadrzaji) {
+		this.sadrzaji = sadrzaji;
+	}
+
+	public boolean isObrisan() {
+		return obrisan;
+	}
+
+	public void setObrisan(boolean obrisan) {
+		this.obrisan = obrisan;
+	}
+
+	public ArrayList<Integer> getRezervacije() {
+		return rezervacije;
+	}
+
+	public void setRezervacije(ArrayList<Integer> rezervacije) {
+		this.rezervacije = rezervacije;
 	}
 	
 	

@@ -1,0 +1,22 @@
+{
+  "1" : {
+    "id" : 1,
+    "apartmanId" : 1,
+    "pocetniDatum" : 1610665200000,
+    "brNocenja" : 3,
+    "ukupnaCena" : 6000.0,
+    "poruka" : "Bla bla bla.",
+    "gost" : "gost",
+    "status" : "Prihvacena"
+  },
+  "2" : {
+    "id" : 2,
+    "apartmanId" : 1,
+    "pocetniDatum" : 1613343600000,
+    "brNocenja" : 2,
+    "ukupnaCena" : 3500.0,
+    "poruka" : "Trebace mi soba za dvoje.",
+    "gost" : "gost",
+    "status" : "Kreirana"
+  }
+}
