@@ -25,7 +25,7 @@ public class SadrzajApartmanaDAO {
 	        sadrzaji.put(4,new SadrzajApartmana(2,"Kuhinja"));
 	        sadrzaji.put( 5 ,new SadrzajApartmana(1,"Pegla"));
 	        sadrzaji.put(6,new SadrzajApartmana(2,"Ves Masina"));
-	        saveData(contextPath);
+	        saveSadrzaj(contextPath);
 	    }
 
 	    public HashMap<Integer, SadrzajApartmana> getSadrzaji() {
@@ -44,7 +44,7 @@ public class SadrzajApartmanaDAO {
 	        return null;
 	    }
 	    
-	    public void saveData(String path) {
+	    public void saveSadrzaj(String path) {
 			BufferedWriter out = null;
 			try {
 				File file = new File(path + "/data/sadrzajApartmana.json");
