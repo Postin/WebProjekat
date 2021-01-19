@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Dodaj apartman</title>
+
+	<script src="js/dodajApartman.js"></script>
+	<script src="./jquery-3.3.1.min.js" type="text/javascript"></script>
+
+
+<style>
+.map {
+	height: 400px;
+	width: 100%;
+}
+</style>
+
+</head>
+<body>
+
+<div id="toolbar">
+            <a href="ads.html">Home</a> <a id="showSearch" data-toggle="tooltip" title="toggle search bar">Search</a>
+        </div>
+
+
+<div class="main">
+
+		<!-- Forma za dodavanje apartmana -->
+		<section class="signup">
+			<div class="container">
+				<div class="signup-content">
+					<div class="signup-form">
+						<h2 class="form-title">Nov apartman</h2>
+						<form class="register-form" id="addApt">
+							<div class="form-group">
+								<label class="label" for="name"><i
+									class="zmdi zmdi-home material-icons-name"
+									data-toggle="tooltip" title="name"></i></label> <input type="text"
+									name="name" id="name" placeholder="Name" data-toggle="tooltip"
+									title="Apartment name" />
+							</div>
+							<div class="form-group">
+								<label class="label" for="roomCount"><i
+									class="zmdi zmdi-home material-icons-name"
+									data-toggle="tooltip" title="roomCount"></i></label> <input
+									type="number" name="roomCount" id="roomCount"
+									placeholder="Number of rooms" data-toggle="tooltip"
+									title="Number of rooms" />
+							</div>
+							<div class="form-group">
+								<label class="label" for="guestCount"><i
+									class="zmdi zmdi-account material-icons-name"
+									data-toggle="tooltip" title="guestCount"></i></label> <input
+									type="number" name="guestCount" id="guestCount"
+									placeholder="Number of guests" data-toggle="tooltip"
+									title="Number of guests" />
+							</div>
+							<div class="form-group">
+								<label class="label" for="price"><i
+									class="zmdi zmdi-money material-icons-name"
+									data-toggle="tooltip" title="price"></i></label> <input type="text"
+									name="price" id="price" placeholder="Price per night"
+									data-toggle="tooltip" title="Price per night" />
+							</div>
+							<div class="form-group">
+								<label class="label" for="street"><i
+									class="zmdi zmdi-map material-icons-name" data-toggle="tooltip"
+									title="street"></i></label> <input type="text" name="street"
+									id="street" placeholder="Street" title="Street" />
+							</div>
+							<div class="form-group">
+								<label class="label" for="place"><i
+									class="zmdi zmdi-map material-icons-name" data-toggle="tooltip"
+									title="place"></i></label> <input type="text" name="place" id="place"
+									placeholder="Place" title="Place" />
+							</div>
+							<div class="form-group">
+								<label class="label" for="postalCode"><i
+									class="zmdi zmdi-map material-icons-name" data-toggle="tooltip"
+									title="postalCode"></i></label> <input type="text" name="postalCode"
+									id="postalCode" placeholder="Postal Code" title="Postal code" />
+							</div>
+							<div class="form-group">
+								<label class="label" for="geoWid"><i
+									class="zmdi zmdi-map material-icons-name" data-toggle="tooltip"
+									title="geoWid"></i></label> <input type="text" name="geoWid"
+									id="geoWid" placeholder="Latitude" title="Latitude" />
+							</div>
+							<div class="form-group">
+								<label class="label" for="geoLen"><i
+									class="zmdi zmdi-map material-icons-name" data-toggle="tooltip"
+									title="geoLen"></i></label> <input type="text" name="geoLen"
+									id="geoLen" placeholder="Longitude" title="Longitude" />
+							</div>
+							<label>Check in time</label><br />
+							<div class="form-group">
+								<label class="label" for="checkin"><i
+									class="zmdi zmdi-time-countdown material-icons-name"
+									data-toggle="tooltip" title="checkin"></i></label> <input type="time"
+									name="checkin" id="checkin" placeholder="Check In"
+									value="14:00" title="Check In" />
+							</div>
+							<label>Check out time</label><br />
+							<div class="form-group">
+								<label class="label" for="checkout"><i
+									class="zmdi zmdi-time-countdown material-icons-name"
+									data-toggle="tooltip" title="checkout"></i></label> <input type="time"
+									name="checkout" id="checkout" placeholder="Check Out"
+									onchange="dateValidate()" value="10:00" title="Check Out" />
+							</div>
+							<label>Start rent date</label><br />
+							<div class="form-group">
+								<label class="label" for="startRent"><i
+									class="zmdi zmdi-account-calendar material-icons-name"
+									data-toggle="tooltip" title="startRent"></i></label> <input type="date"
+									value="2020-07-01" name="startRent" id="startRent"
+									onchange="dateValidate()" placeholder="Start Rent Date"
+									title="Start rent date" />
+							</div>
+							<label>End rent date</label><br />
+							<div class="form-group">
+								<label class="label" for="endRent"><i
+									class="zmdi zmdi-account-calendar material-icons-name"
+									data-toggle="tooltip" title="endRent"></i></label> <input type="date"
+									value="2020-07-01" name="endRent" id="endRent"
+									placeholder="End Rent Date" title="End rent date" />
+							</div>
+							<label>Images</label><br />
+							<div class="form-group">
+								<div id="imgs"></div>
+								<label class="label" for="img"><i class="zmdi"
+									data-toggle="tooltip" title="img"></i></label> <input type="file"
+									id="img" name="img" onchange="showimg()" accept="image/*" />
+							</div>
+							<label>Amenities</label><br />
+							<div class="form-group" id="amenities"></div>
+							<div  class="form-group">
+								<label class="label">Apartment type</label>
+								<br/><br/><br/> <select id="aptType">
+									<option value="full">full</option>
+									<option value="room">room</option>
+								</select>
+							</div>
+							<div class="form-group form-button">
+								<input type="submit" name="addApt" id="addApt"
+									class="form-submit" value="Create" />
+							</div>
+						</form>
+					</div>
+					<div class="new-apartment-image" id="right-side">
+						<figure>
+							<img src="../images/apartmani.jpg" alt="slika novog apartmana">
+						</figure>
+						<div id="map" class="map">Location:</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+	</div>
+
+
+</body>
+</html>
