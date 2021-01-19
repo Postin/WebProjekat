@@ -3,21 +3,20 @@ package beans;
 import java.util.UUID;
 
 public class Komentar {
-	private UUID id;
+	private Integer id;
 	private Korisnik gost;
 	private Apartman apartman;
 	private String tekst;
 	private int ocena;
 	
 	public Komentar() {
-		// TODO Auto-generated constructor stub
-		this.id = UUID.randomUUID();
+		
 	}
 	
-	public UUID getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(UUID id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public Korisnik getGost() {

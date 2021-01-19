@@ -7,7 +7,7 @@ public class Lokacija {
 	private Adresa adresa;
 	
 	public Lokacija() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public Lokacija(double geoSirina, double geoDuzina, Adresa adresa) {
