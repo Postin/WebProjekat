@@ -1,15 +1,19 @@
 package dao;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 import beans.Apartman;
 import beans.Korisnik;
@@ -43,6 +47,26 @@ public class RezervacijaDAO {
 			if (in != null) {
 				try {
 					in.close();
+				} catch (Exception e) {}
+			}
+		}
+	}
+	
+	public void saveRezervacije(String path) {
+		BufferedWriter out = null;
+		try {
+			File file = new File(path + "/data/reservations.json");
+			out = new BufferedWriter(new FileWriter(file));
+			ObjectMapper mapper = new ObjectMapper();
+			ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());  
+			String content = writer.writeValueAsString(this.rezervacije);
+			out.write(content);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
 				} catch (Exception e) {}
 			}
 		}

@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import beans.Apartman;
 import beans.Korisnik;
@@ -43,8 +46,8 @@ public class RezervacijaService {
 		}
 	}
 	
-	@POST
-	@Path("/get_rezervacija/{korisnickoIme}")
+	@GET
+	@Path("/get_rezervacije/{korisnickoIme}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Rezervacija> getRezervacije(@PathParam("korisnickoIme") String korisnickoIme) {
@@ -85,6 +88,68 @@ public class RezervacijaService {
 		}
 		
 		return null;
+	}
+	
+	
+	@PUT
+	@Path("/odustani/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odustani(@PathParam("id") Integer id) {
+		RezervacijaDAO rezervacije = (RezervacijaDAO)ctx.getAttribute("rezervacijaDAO");
+		Rezervacija r = rezervacije.findRezervacija(id);
+		if(r.getStatus().equals("Kreirana") || r.getStatus().equals("Prihvacena"))
+			r.setStatus("Odustanak");
+		else {
+			return null;
+		}
+
+		ctx.setAttribute("rezervacijaDAO", rezervacije);
+		String path = ctx.getRealPath("");
+		rezervacije.saveRezervacije(path);
+		
+		return Response.status(200).build();
+	}
+	
+	@PUT
+	@Path("/prihvati/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response prihvati(@PathParam("id") Integer id) {
+		RezervacijaDAO rezervacije = (RezervacijaDAO)ctx.getAttribute("rezervacijaDAO");
+		Rezervacija r = rezervacije.findRezervacija(id);
+		if(r.getStatus().equals("Kreirana"))
+			r.setStatus("Prihvacena");
+		else {
+			return null;
+		}
+		
+		ctx.setAttribute("rezervacijaDAO", rezervacije);
+		String path = ctx.getRealPath("");
+		rezervacije.saveRezervacije(path);
+		
+		return Response.status(200).build();
+	}
+	
+	@PUT
+	@Path("/odbij/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odbij(@PathParam("id") Integer id) {
+		RezervacijaDAO rezervacije = (RezervacijaDAO)ctx.getAttribute("rezervacijaDAO");
+		Rezervacija r = rezervacije.findRezervacija(id);
+		
+		if(r.getStatus().equals("Kreirana") || r.getStatus().equals("Prihvacena"))
+			r.setStatus("Odbijena");
+		else {
+			return null;
+		}
+		
+		ctx.setAttribute("rezervacijaDAO", rezervacije);
+		String path = ctx.getRealPath("");
+		rezervacije.saveRezervacije(path);
+		
+		return Response.status(200).build();
 	}
 
 }
