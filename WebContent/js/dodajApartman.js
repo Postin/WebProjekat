@@ -9,15 +9,15 @@ $(document).ready(function () {
     var loggedUser = null;
 
     $.get({
-        url: '../rest/user/currUser',
+        url: '../rest/users/ulogovan',
         success: function (user) {
             loggedUser = user;
             if (user == null) {
                 window.location = "../";
                 return;
             }
-            if (user.role !== "host") {
-                window.location = "ads.html";
+            if (user.uloga !== "DOMACIN") {
+                window.location = "../";
                 return;
             }
 
@@ -50,51 +50,51 @@ $(document).ready(function () {
                     return;
                 }
 
-                var name = $("#name").val();
-                var roomCount = parseInt($("#roomCount").val());
-                var guestCount = parseInt($("#guestCount").val());
-                var price = parseFloat($("#price").val());
-                var street = $("#street").val();
-                var place = $("#place").val();
-                var postalCode = $("#postalCode").val();
-                var geoWid = parseFloat($("#geoWid").val());
-                var geoLen = parseFloat($("#geoLen").val());
-                var checkin = $("#checkin").val();
-                var checkout = $("#checkout").val();
-                var startDate = $("#startRent").val();
-                var endDate = $("#endRent").val();
-                var aptType = $("#aptType").val();
-                var images = [];
+                var ime = $("#name").val();
+                var brojSoba = parseInt($("#roomCount").val());
+                var brojGostiju = parseInt($("#guestCount").val());
+                var cena = parseInt($("#price").val());
+                var ulica = $("#street").val();
+                var mesto = $("#place").val();
+                var postanskiBroj = $("#postalCode").val();
+                var geoSirina = parseFloat($("#geoWid").val());
+                var geoDuzina = parseFloat($("#geoLen").val());
+                var vremePrijave = $("#checkin").val();
+                var vremeOdjave = $("#checkout").val();
+                var pocetakDatum = $("#startRent").val();
+                var krajDatum = $("#endRent").val();
+                var tip = $("#aptType").val();
+                var slike = [];
 
                 var imgs = document.getElementById('imgs').getElementsByTagName('img');
                 for (var i = 0; i < imgs.length; i++) {
-                    images.push(imgs[i].src)
+                    slike.push(imgs[i].src)
                 }
 
-                var amenities = [];
+                var sadrzaji = [];
 
-                var children = document.getElementById('amenities').getElementsByTagName('input');
+                var children = document.getElementById('amenities').getElementsByTagName('input'); //input
                 for (var i = 0; i < children.length; i++) {
                     if (children[i].checked == true) {
-                        amenities.push(children[i].id);
+                        sadrzaji.push(children[i].id);
                     }
                 }
 
-                address = new Address(street, place, postalCode);
-                l = new Location(geoWid, geoLen, address)
-                apartment = new Apartment(name, roomCount, guestCount, l, price, checkin, checkout, startDate, endDate, images, amenities, aptType);
+                adresa = new Adresa(ulica, mesto, postanskiBroj);
+                lokacija = new Lokacija(geoSirina, geoDuzina, adresa)
+                apartman = new Apartman(ime, brojSoba, brojGostiju, lokacija, cena, vremePrijave, vremeOdjave, pocetakDatum, krajDatum, slike, sadrzaji, tip);
 
                 $.ajax({
-                    url: '../rest/apartment/',
+                    url: '../rest/apartmans/',
                     contentType: "application/json",
-                    data: JSON.stringify(apartment),
+                    data: JSON.stringify(apartman),
                     type: 'POST',
                     success: function () {
-                        alert('apartment added')
-                        window.location = "ads.html"
+                        alert('Apartman je dodat!')
+                   //     window.location = "ads.html"
                     },
-                    error: function (jqxhr) {
-                        alert(jqxhr.responseText)
+                    error: function (f) {
+                        alert(f.responseText)
                     }
                 });
             });
@@ -269,7 +269,7 @@ $(document).ready(function () {
         }
 
         if (mm2 < mm) {
-            alert("mjesec")
+            alert("mesec")
             document.getElementById("endRent").style.borderColor = "#FF0000";
             return false;
         } else {
@@ -300,22 +300,22 @@ $(document).ready(function () {
         $("#price").keyup(priceValidate);
 
         var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
+        var dd = String(today.getDate()).padStart(2, '0'); //getDate() vraca 1 ako je januar, a sa padStart vratice 01
         var mm = String(today.getMonth() + 1).padStart(2, '0');
         var yyyy = today.getFullYear();
 
         today = yyyy + '-' + mm + '-' + dd;
 
         document.getElementById('startRent').value = today;
-        document.getElementById('startRent').min = today;
+        document.getElementById('startRent').min = today; //vraca minimalnu dozvoljenu vrednost za element
         document.getElementById('endRent').value = today;
         document.getElementById('endRent').min = today;
 
         $.get({
-            url: '../rest/amenity',
-            success: function (amenities) {
-                for (let amenity of amenities) {
-                    $('#amenities').append("<br/><input type=\"checkbox\" name=\"type\" id=\"" + amenity.id + "\" class=\"agree-term\" /> <label for=\"" + amenity.id + "\" class=\"label-agree-term\"><span><span></span></span>" + amenity.name + "</label>");
+            url: '../rest/sadrzaj',
+            success: function (sadrzaji) {
+                for (let sadrzaj of sadrzaji) {
+                    $('#amenities').append("<br/><input type=\"checkbox\" name=\"type\" id=\"" + sadrzaj.id + "\" class=\"agree-term\" /> <label for=\"" + sadrzaj.id + "\" class=\"label-agree-term\"><span><span></span></span>" + sadrzaj.naziv + "</label>");
                 }
             }
         });
@@ -323,76 +323,46 @@ $(document).ready(function () {
 
 });
 
-function dateValidate() {
-    var yyyy = parseInt($("#startRent").val().substr(0, 4));
-    var mm = parseInt($("#startRent").val().substr(5, 7));
-    var dd = parseInt($("#startRent").val().substr(8, 10));
 
-    var yyyy2 = parseInt($("#endRent").val().substr(0, 4));
-    var mm2 = parseInt($("#endRent").val().substr(5, 7));
-    var dd2 = parseInt($("#endRent").val().substr(8, 10));
-
-    if (yyyy2 < yyyy) {
-        document.getElementById("endRent").style.borderColor = "#FF0000";
-        return false;
-    } else {
-        document.getElementById("endRent").style.borderColor = "#000000";
-    }
-
-    if (mm2 < mm) {
-        document.getElementById("endRent").style.borderColor = "#FF0000";
-        return false;
-    } else {
-        document.getElementById("endRent").style.borderColor = "#000000";
-    }
-
-    if (dd2 < dd) {
-        document.getElementById("endRent").style.borderColor = "#FF0000";
-        return false;
-    } else {
-        document.getElementById("endRent").style.borderColor = "#000000";
-    }
-
-    return true;
-}
 
 function generateToolBar(user) {
 
     if (user != null) {
-        if (user.role === "host") {
-            var newApartment = document.createElement('a');
-            newApartment.innerHTML = "Add apartment";
-            newApartment.setAttribute('data-toggle', 'tooltip');
-            newApartment.setAttribute('href', 'newApartment.html');
-            newApartment.setAttribute('data-toggle', 'tooltip');
-            document.getElementById("toolbar").appendChild(newApartment);
-            $('#toolbar').append("<a href=\"userList.html\" id=\"userList\" data-toggle=\"tooltip\" title=\"toggle search bar\">User List</a>");
-        } else if (user.role === "admin") {
-            var amenities = document.createElement('a');
-            amenities.innerHTML = "Amenities";
-            amenities.setAttribute('data-toggle', 'tooltip');
-            amenities.setAttribute('href', 'amenities.html');
-            amenities.setAttribute('data-toggle', 'tooltip');
-            document.getElementById("toolbar").appendChild(amenities);
-            $('#toolbar').append("<a href=\"userList.html\" id=\"userList\" data-toggle=\"tooltip\" title=\"toggle search bar\">User List</a>");
-            $('#toolbar').append("<a href=\"holidays.html\" id=\"holidays\" data-toggle=\"tooltip\" title=\"toggle search bar\">Holidays</a>");
-        }
+    	 if (user.uloga === "DOMACIN") {
+             var novApartman = document.createElement('a');
+             novApartman.innerHTML = "Dodaj apartman";
+             novApartman.setAttribute('data-toggle', 'tooltip');
+             novApartman.setAttribute('href', 'dodajApartman.html');
+             novApartman.setAttribute('data-toggle', 'tooltip');
+             document.getElementById("toolbar").appendChild(novApartman);
+         //    $('#toolbar').append("<a href=\"userList.html\" id=\"userList\" data-toggle=\"tooltip\" title=\"toggle search bar\">User List</a>");
+    	
+    	 } else if (user.uloga === "ADMINISTRATOR") {
+             var sadrzaji = document.createElement('s');
+             sadrzaji.innerHTML = "Sadrzaji";
+             sadrzaji.setAttribute('data-toggle', 'tooltip');
+             sadrzaji.setAttribute('href', 'sadrzajApartmana.html');
+             sadrzaji.setAttribute('data-toggle', 'tooltip');
+             document.getElementById("toolbar").appendChild(sadrzaji);
+       //      $('#toolbar').append("<a href=\"userList.html\" id=\"userList\" data-toggle=\"tooltip\" title=\"toggle search bar\">User List</a>");
+       //      $('#toolbar').append("<a href=\"holidays.html\" id=\"holidays\" data-toggle=\"tooltip\" title=\"toggle search bar\">Holidays</a>");
+         }
 
-        $('#toolbar').append("<a href=\"reservations.html\" id=\"reservations\" data-toggle=\"tooltip\" title=\"toggle search bar\">Reservations</a>");
+ //       $('#toolbar').append("<a href=\"reservations.html\" id=\"reservations\" data-toggle=\"tooltip\" title=\"toggle search bar\">Reservations</a>");
 
-        if (user.role != "guest") {
-            var comment = document.createElement('a');
-            comment.innerHTML = "Comments";
-            comment.setAttribute('href', 'comment.html');
-            document.getElementById("toolbar").appendChild(comment);
-        }
-
-        var profile = document.createElement('a');
-        profile.innerHTML = "Profile";
-        profile.setAttribute('data-toggle', 'tooltip');
-        profile.setAttribute('href', 'userProfile.html');
-        profile.setAttribute('data-toggle', 'tooltip');
-        document.getElementById("toolbar").appendChild(profile);
+//        if (user.role != "guest") {
+//            var comment = document.createElement('a');
+//            comment.innerHTML = "Comments";
+//            comment.setAttribute('href', 'comment.html');
+//            document.getElementById("toolbar").appendChild(comment);
+//        }
+//
+//        var profile = document.createElement('a');
+//        profile.innerHTML = "Profile";
+//        profile.setAttribute('data-toggle', 'tooltip');
+//        profile.setAttribute('href', 'userProfile.html');
+//        profile.setAttribute('data-toggle', 'tooltip');
+//        document.getElementById("toolbar").appendChild(profile);
 
         var element = document.createElement('a');
         element.id = "logout";
@@ -402,7 +372,7 @@ function generateToolBar(user) {
         element.setAttribute('href', 'login.html');
         document.getElementById("toolbar").appendChild(element);
     } else {
-        $("#toolbar").append("<a href=\"login.html\" data-toggle=\"tooltip\" >Login</a><a href=\"register.html\" data-toggle=\"tooltip\">Register</a>");
+        $("#toolbar").append("<a href=\"login.html\" data-toggle=\"tooltip\" >Login</a><a href=\"registration.html\" data-toggle=\"tooltip\">Register</a>");
     }
 }
 
@@ -415,7 +385,7 @@ function showimg() {
         $('#imgs').append("<button type=\"button\" onclick=\"removeimg(" + counter + ")\" style=\"background-color: #ff0000\" id=\"imgbutton" + counter + "\">Remove</button>");
         counter += 1;
     }
-    document.getElementById('img').value = "";
+    document.getElementById('img').value = ""; //..
 }
 
 function removeimg(id) {
@@ -425,7 +395,7 @@ function removeimg(id) {
 
 function logout() {
     return $.post({
-        url: '../rest/user/logout',
+        url: '../rest/users/logout',
         contentType: 'application/json',
         success: function () {
             localStorage.removeItem('jwt');
@@ -496,35 +466,35 @@ function initMap() {
     });
 }
 
-class Apartment {
-    constructor(name, roomCount, guestCount, location, price, checkin, checkout, startDate, endDate, images, amenities, aptType) {
-        this.name = name
-        this.roomCount = roomCount
-        this.guestCount = guestCount
-        this.location = location
-        this.price = price
-        this.timeForCheckIn = checkin
-        this.timeForCheckOut = checkout
-        this.startDate = startDate
-        this.endDate = endDate
-        this.images = images
-        this.amenities = amenities
-        this.aptType = aptType
+class Apartman {
+    constructor(ime, brojSoba, brojGostiju, lokacija, cena, vremePrijave, vremeOdjave, pocetakDatum, krajDatum, slike, sadrzaji, tip) {
+        this.ime = ime
+        this.brojSoba = brojSoba
+        this.brojGostiju = brojGostiju
+        this.lokacija = lokacija
+        this.cena = cena
+        this.vremePrijave = vremePrijave
+        this.vremeOdjave = vremeOdjave
+        this.pocetakDatum = pocetakDatum
+        this.krajDatum = krajDatum
+        this.slike = slike
+        this.sadrzaji = sadrzaji
+        this.tip = tip
     }
 }
 
-class Location {
-    constructor(geoWid, geoLen, address) {
-        this.geoWid = geoWid
-        this.geoLen = geoLen
-        this.address = address
+class Lokacija {
+    constructor(geoSirina, geoDuzina, adresa) {
+        this.geoSirina = geoSirina
+        this.geoDuzina = geoDuzina
+        this.adresa = adresa
     }
 }
 
-class Address {
-    constructor(street, place, postalCode) {
-        this.street = street
-        this.place = place
-        this.postalCode = postalCode
+class Adresa {
+    constructor(ulica, mesto, postanskiBroj) {
+        this.ulica = ulica
+        this.mesto = mesto
+        this.postanskiBroj = postanskiBroj
     }
 }

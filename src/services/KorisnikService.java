@@ -91,6 +91,13 @@ public class KorisnikService {
 		
 	}
 	
+	 @GET
+	 @Path("/ulogovan")
+	 @Produces(MediaType.APPLICATION_JSON)
+	  	public Korisnik currentUser(@Context HttpServletRequest request) {
+	        return (Korisnik) request.getSession().getAttribute("loggedUser");
+	    }
+	
 	@GET
 	@Path("/uloga/{korisnickoIme}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -205,4 +212,15 @@ public class KorisnikService {
 		
 		return gosti;		
 	}
+	
+	
+	//dodala
+	@POST
+    @Path("/logout")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void logout(@Context HttpServletRequest request) {
+        request.getSession().setAttribute("loggedUser", null);
+        request.getSession().invalidate();
+    }
 }
