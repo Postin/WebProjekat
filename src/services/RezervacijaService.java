@@ -78,7 +78,7 @@ public class RezervacijaService {
 			//TODO domacin vidi sve sve rezervacije gde je on vlasnik apartmana
 			ArrayList<Rezervacija> rez = new ArrayList<Rezervacija>();
 			for(Rezervacija r: rezervacije.getRezervacije().values()) {
-				Apartman a = apartmani.findApartman(r.getApartmanId());
+				Apartman a = apartmani.findApartmanById(r.getApartmanId());
 				if(a.getDomacin().equals(korisnickoIme)) {
 					rez.add(r);
 				}

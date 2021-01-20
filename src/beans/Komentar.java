@@ -8,11 +8,31 @@ public class Komentar {
 	private Apartman apartman;
 	private String tekst;
 	private int ocena;
+	private boolean vidljivost;
 	
 	public Komentar() {
-		
+
 	}
 	
+	public Komentar(Integer id, Korisnik gost, Apartman apartman, String tekst, int ocena) {
+		super();
+		this.id = id;
+		this.gost = gost;
+		this.apartman = apartman;
+		this.tekst = tekst;
+		this.ocena = ocena;
+		this.vidljivost = true;
+	}
+
+
+
+	public boolean isVidljivost() {
+		return vidljivost;
+	}
+
+	public void setVidljivost(boolean vidljivost) {
+		this.vidljivost = vidljivost;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -43,5 +63,12 @@ public class Komentar {
 	public void setOcena(int ocena) {
 		this.ocena = ocena;
 	}
+
+	@Override
+	public String toString() {
+		return "Komentar [id=" + id + ", gost=" + gost + ", apartman=" + apartman + ", tekst=" + tekst + ", ocena="
+				+ ocena + "]";
+	}
+	
 	
 }

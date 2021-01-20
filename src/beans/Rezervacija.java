@@ -17,7 +17,7 @@ public class Rezervacija {
 		super();
 	}
 	
-	public Rezervacija(Integer id, Integer apartmanId, Date pocetniDatum, int brNocenja, int ukupnaCena, String poruka, String gost, String status) {
+	public Rezervacija(Integer id, Integer apartmanId, Date pocetniDatum, int brNocenja, int ukupnaCena, String poruka, String gost, String status)  {
 		this.id = id;
 		this.apartmanId = apartmanId;
 		this.pocetniDatum = pocetniDatum;
@@ -78,4 +78,13 @@ public class Rezervacija {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	@Override
+	public String toString() {
+		return "Rezervacija [id=" + id + ", apartman=" + apartmanId + ", pocetniDatum=" + pocetniDatum + ", brNocenja="
+				+ brNocenja + ", ukupnaCena=" + ukupnaCena + ", poruka=" + poruka + ", gost=" + gost + ", status="
+				+ status + "]";
+	}
+	
+	
 }

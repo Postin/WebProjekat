@@ -97,6 +97,13 @@ public class KorisnikService {
 		//return Response.status(200).build();	
 	}
 	
+	 @GET
+	 @Path("/ulogovan")
+	 @Produces(MediaType.APPLICATION_JSON)
+	  	public Korisnik currentUser(@Context HttpServletRequest request) {
+	        return (Korisnik) request.getSession().getAttribute("loggedUser");
+	    }
+	
 	@GET
 	@Path("/uloga/{korisnickoIme}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -191,7 +198,7 @@ public class KorisnikService {
 		HashMap<String,Korisnik> svi = korisnici.getKorisnici();
 		
 		for(Rezervacija r: rezervacije.getRezervacije().values()) {
-			String domacin = apartmani.findApartman(r.getApartmanId()).getDomacin(); //nadjem domacina
+			String domacin = apartmani.findApartmanById(r.getApartmanId()).getDomacin(); //nadjem domacina
 			
 			if(domacin.equals(korisnickoIme)) {
 				if(!gosti.contains(korisnici.findUser(korisnickoIme))) {
@@ -218,5 +225,13 @@ public class KorisnikService {
 		return rez;
 	}
 	
-	
+	//dodala
+	@POST
+    @Path("/logout")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void logout(@Context HttpServletRequest request) {
+        request.getSession().setAttribute("loggedUser", null);
+        request.getSession().invalidate();
+    }
 }

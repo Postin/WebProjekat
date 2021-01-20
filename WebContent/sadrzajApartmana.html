@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Sadrzaj Apartmana</title>
+	<script src="./jquery-3.3.1.min.js" type="text/javascript"></script>
+	<script src="js/sadrzajApartmana.js"></script>
+	
+
+</head>
+<body>
+
+<div id="toolbar">
+            <a href="#">Home</a> <a id="showSearch" data-toggle="tooltip" title="toggle search bar">Search</a>
+          
+</div>
+
+<div class="main">
+
+        <!-- form -->
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">Sadrzaji</h2>
+                        <h3 class="form-title">Nov sadrzaj</h3>
+                        <form class="register-form" id="addAmenity">
+                            <div class="form-group">
+                                		<label class="label" for="name"><i class="zmdi zmdi-home material-icons-name"
+                                        data-toggle="tooltip" title="name"></i></label> 
+                                        <input type="text" name="name"
+                                    id="name" placeholder="Name" onkeyup="validateName()" data-toggle="tooltip"
+                                    title="Amenity name" />
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="addAmenity" id="addAmenity" class="form-submit"
+                                    value="Create" />
+                            </div>
+                        </form>
+                        <h3 class="form-title">Svi sadrzaji: </h3>
+                        <form class="register-form" id="addAmenity">
+                            <div class="form-group">
+                                <table id="amenities" style="width: 100%; text-align: center" class="register-form">
+                                    <tr>
+                                        <th>Name</th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="new-apartment-image">
+                        <figure>
+                            <img src="images/apartmani.jpg" alt="new apartment image">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+
+
+
+</body>
+</html>
