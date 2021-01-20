@@ -153,7 +153,7 @@ public class ApartmanDAO {
 	public void loadApartmans(String path) {
 		BufferedReader in = null;
 		try {
-			File file = new File(path + "/data/apartmani.json");
+			File file = new File(path + "/data/apartments.json");
 			in = new BufferedReader(new FileReader(file));
 			String line;
 			StringBuilder sb = new StringBuilder();
@@ -176,7 +176,7 @@ public class ApartmanDAO {
 	public void saveApartmans(String path) {
 		BufferedWriter out = null;
 		try {
-			File file = new File(path + "/data/apartmani.json");
+			File file = new File(path + "/data/apartments.json");
 			out = new BufferedWriter(new FileWriter(file));
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());  

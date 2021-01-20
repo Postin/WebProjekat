@@ -134,15 +134,16 @@ public class ApartmanService {
 		LocalDate krajDatum = LocalDate.parse(apt.getKrajDatum());
 
 		for (LocalDate date = pocetakDatum; date.isBefore(krajDatum); date = date.plusDays(1)) {
-			a.getDatumiZaIzdavanje().add(date);
+			String datum = pocetakDatum.toString();
+			a.getDatumiZaIzdavanje().add(datum);
 		}
 
 		a.setSadrzaj(sadrzajiApt);
 		a.setSlike(apt.getSlike());
-		LocalTime prijava = LocalTime.parse(apt.getVremePrijave());
-		a.setVremeZaPrijavu(prijava);
-		LocalTime odjava = LocalTime.parse(apt.getVremeOdjave());
-		a.setVremeZaOdjavu(odjava);
+	//	LocalTime prijava = LocalTime.parse(apt.getVremePrijave());
+		a.setVremeZaPrijavu(apt.getVremePrijave());
+	//	LocalTime odjava = LocalTime.parse(apt.getVremeOdjave());
+		a.setVremeZaOdjavu(apt.getVremeOdjave());
 		apts.put(a.getId(), a);
 		aptDao.setApartmani(apts);
 		ctx.setAttribute("apartmanDAO", aptDao);

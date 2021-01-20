@@ -2,8 +2,9 @@
   "1" : {
     "id" : 1,
     "tip" : "SOBA",
+    "ime" : "Ime1",
     "brojSoba" : 2,
-    "brojGostiju" : 2,
+ 	"brojGostiju" : 2,
     "lokacija" : {
       "geoSirina" : 45.014,
       "geoDuzina" : 19.821,
@@ -18,11 +19,11 @@
     "domacin" : "domacin",
     "komentari" : [ ],
     "slike" : [ ],
-    "cenaPoNoci" : 50.0,
+    "cenaPoNoci" : 50,
     "vremeZaPrijavu" : "14:00",
     "vremeZaOdjavu" : "10:00",
-    "status" : "aktivan",
-    "sadrzaji" : [ ],
-    "rezervacije" : [ ]
-  }
-}
+    "aktivan" : true,
+    "sadrzaj" : [{"id" : 11,"naziv" :"bazen za decu","obrisan" :false} ]
+    
+ 	}
+ }
