@@ -76,7 +76,8 @@ public class ApartmanService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addApartment(@Context HttpServletRequest request, ApartmanDto apt) {
 		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
-		if (ulogovan == null || ulogovan.getUloga() != "DOMACIN") {
+
+		if (ulogovan == null || !ulogovan.getUloga().equals("DOMACIN")) {
 			return Response.status(403).entity("Forbidden").build();
 		}
 
@@ -128,7 +129,7 @@ public class ApartmanService {
 		a.setVremeZaOdjavu(odjava);
 		apts.put(a.getId(), a);
 		aptDao.setApartmani(apts);
-		ctx.setAttribute("apartmanDao", aptDao);
+		ctx.setAttribute("apartmanDAO", aptDao);
 		String contextPath = ctx.getRealPath("");
 		aptDao.saveApartmans(contextPath);
 		System.out.println("Uspesno dodat apartman!");

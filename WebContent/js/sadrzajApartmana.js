@@ -1,7 +1,7 @@
 $(document).ready(function () {
     loggedUser = null;
     $.get({
-        url: '../rest/users/ulogovan',
+        url: 'rest/users/ulogovan',
         success: function (user) {
             loggedUser = user;
             generateToolBar(user);
@@ -20,7 +20,7 @@ $(document).ready(function () {
             return;
         }
         $.post({
-            url: '../rest/sadrzaj?name=' + name,
+            url: 'rest/sadrzaj?name=' + name,
             contentType: 'application/json',
             success: function (data) {
                 alert("Sadrzaj je dodat")
@@ -33,7 +33,7 @@ $(document).ready(function () {
     });
 
     $.get({
-        url: '../rest/sadrzaj',
+        url: 'rest/sadrzaj',
         success: function (data) {
             for (let sadrzaj of data) {
                 var tableRef = document.getElementById('amenities').getElementsByTagName('tbody')[0];
@@ -68,7 +68,7 @@ $(document).ready(function () {
                     e.preventDefault();
                     var txt = document.getElementById("value" + sadrzaj.id).value;
                     $.ajax({
-                        url: '../rest/sadrzaj?id=' + sadrzaj.id + "&name=" + txt,
+                        url: 'rest/sadrzaj?id=' + sadrzaj.id + "&name=" + txt,
                         type: 'PUT',
                         contentType: 'application/json',
                         success: function () {
@@ -84,7 +84,7 @@ $(document).ready(function () {
                 dltBtn.onclick = function (e) {
                     e.preventDefault();
                     $.ajax({
-                        url: '../rest/sadrzaj?id=' + event.srcElement.id, //vratice id elementa na kom je izvrsen dogadjaj click()
+                        url: 'rest/sadrzaj?id=' + event.srcElement.id, //vratice id elementa na kom je izvrsen dogadjaj click()
                         type: 'DELETE',
                         contentType: 'application/json',
                         success: function () {
@@ -153,7 +153,7 @@ function generateToolBar(user) {
 
 function logout() {
     return $.post({
-        url: '../rest/users/logout',
+        url: 'rest/users/logout',
         contentType: 'application/json',
         success: function () {
             localStorage.removeItem('jwt');

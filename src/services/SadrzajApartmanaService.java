@@ -35,8 +35,8 @@ public class SadrzajApartmanaService {
 		String path = ctx.getRealPath("");
 		
 	
-		if(ctx.getAttribute("sadrzajDao") == null) {
-			ctx.setAttribute("sadrzajDao", new SadrzajApartmanaDAO(path));
+		if(ctx.getAttribute("sadrzajDAO") == null) {
+			ctx.setAttribute("sadrzajDAO", new SadrzajApartmanaDAO(path));
 		}
 	}
 	
@@ -44,10 +44,10 @@ public class SadrzajApartmanaService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response dodajSadrzaj(@QueryParam("name") String name, @Context HttpServletRequest request) {
 		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
-		if (ulogovan.getUloga() != "ADMINISTRATOR") {
+		if (!ulogovan.getUloga().equals("ADMINISTRATOR") || ulogovan.equals(null)) {
 			return Response.status(403).entity("Forbidden").build();
 		}
-		SadrzajApartmanaDAO saDao = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDao"));
+		SadrzajApartmanaDAO saDao = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDAO"));
 		HashMap<Integer, SadrzajApartmana> sadrzaji = saDao.getSadrzaji();
 
 		Integer id = 0;
@@ -61,7 +61,7 @@ public class SadrzajApartmanaService {
 		sadrzaji.put(id, sa);
 		saDao.setSadrzaji(sadrzaji);
 		
-		ctx.setAttribute("sadrzajDao", saDao);
+		ctx.setAttribute("sadrzajDAO", saDao);
 		String contextPath = ctx.getRealPath("");
 		saDao.saveSadrzaj(contextPath);
 		System.out.println("Uspesno dodat sadrzaj!");
@@ -73,7 +73,7 @@ public class SadrzajApartmanaService {
 	public Response prikazSadrzaja(@Context HttpServletRequest request) {
 		
 		ArrayList<SadrzajApartmana> sa = new ArrayList<SadrzajApartmana>();
-		SadrzajApartmanaDAO saDao = (SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDao");
+		SadrzajApartmanaDAO saDao = (SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDAO");
 		
 		if (saDao.getSadrzaji().values().size() > 0) {
 			for (SadrzajApartmana a : saDao.getSadrzaji().values()) {
@@ -89,11 +89,11 @@ public class SadrzajApartmanaService {
 	@DELETE
 	public Response obrisiSadrzaj(@QueryParam("id") Integer id, @Context HttpServletRequest request) {
 		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
-		if (ulogovan.getUloga() != "ADMINISTRATOR") {
+		if (!ulogovan.getUloga().equals("ADMINISTRATOR")) {
 			return Response.status(403).entity("Forbidden").build();
 		}
 		try {
-			SadrzajApartmanaDAO sadrzajDAO = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDao"));
+			SadrzajApartmanaDAO sadrzajDAO = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDAO"));
 			SadrzajApartmana a = sadrzajDAO.findById(id);
 			
 			if (a == null) {
@@ -101,7 +101,7 @@ public class SadrzajApartmanaService {
 			}
 			
 			HashMap<Integer, SadrzajApartmana> sadrzaji = sadrzajDAO.getSadrzaji();
-			ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDao"));
+			ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDAO"));
 
 			for (Apartman apt : aptDao.getApartmani().values()) {
 				for (SadrzajApartmana sa : apt.getSadrzaj()) { // can I get an amen
@@ -111,7 +111,7 @@ public class SadrzajApartmanaService {
 				}
 			}
 			
-			ctx.setAttribute("apartmanDao", aptDao);
+			ctx.setAttribute("apartmanDAO", aptDao);
 			String contextPath = ctx.getRealPath("");
 			aptDao.saveApartmans(contextPath);
 			System.out.println("Uspesno obrisan sadrzaj!");
@@ -123,8 +123,8 @@ public class SadrzajApartmanaService {
 			sadrzajDAO.saveSadrzaj(contextPath);
 			aptDao.saveApartmans(contextPath);
 			
-			ctx.setAttribute("apartmanDao", aptDao);
-			ctx.setAttribute("sadrzajDao", sadrzajDAO);
+			ctx.setAttribute("apartmanDAO", aptDao);
+			ctx.setAttribute("sadrzajDAO", sadrzajDAO);
 			return Response.status(200).build();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,21 +138,21 @@ public class SadrzajApartmanaService {
 	public Response izmeniSadrzaj(@QueryParam("id") Integer id, @QueryParam("name") String name,
 	        @Context HttpServletRequest request, SadrzajApartmana sadrzaj) {
 		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
-		if (ulogovan.getUloga() != "ADMINISTRATOR") {
+		if (!ulogovan.getUloga().equals("ADMINISTRATOR")) {
 			return Response.status(403).entity("Forbidden").build();
 		}
 
 		try {
-			SadrzajApartmana a = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDao")).findById(id);
+			SadrzajApartmana a = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDAO")).findById(id);
 			if (a == null) {
 				return Response.status(400).entity("Sadrzaj nije pronadjen").build();
 			}
-			SadrzajApartmanaDAO sadrzajDAO = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDao"));
+			SadrzajApartmanaDAO sadrzajDAO = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDAO"));
 			HashMap<Integer, SadrzajApartmana> mapaSadrzaja = sadrzajDAO.getSadrzaji();
 
-			ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDao"));
+			ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDAO"));
 
-			for (Apartman apt : aptDao.getApartmani().values()) {
+			for (Apartman apt : aptDao.getApartmani().values()) { //TODO Poreklo greske je vrv LocalDate u Apartments
 				for (SadrzajApartmana sa : apt.getSadrzaj()) { // can I get an amen
 					if (sa.getId() == id) {
 						sa.setNaziv(name);
@@ -167,8 +167,8 @@ public class SadrzajApartmanaService {
 			sadrzajDAO.saveSadrzaj(contextPath);
 			aptDao.saveApartmans(contextPath);
 			
-			ctx.setAttribute("apartmanDao", aptDao);
-			ctx.setAttribute("sadrzajDao", sadrzajDAO);
+			ctx.setAttribute("apartmanDAO", aptDao);
+			ctx.setAttribute("sadrzajDAO", sadrzajDAO);
 			return Response.status(200).build();
 		} catch (Exception e) {
 			e.printStackTrace();

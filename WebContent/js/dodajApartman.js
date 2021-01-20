@@ -3,13 +3,13 @@ Glongitude = ""
 Glatitude = ""
 $(document).ready(function () {
 	
-	initMap()
+	//initMap()
 
     counter = 0;
     var loggedUser = null;
 
     $.get({
-        url: '../rest/users/ulogovan',
+        url: 'rest/users/ulogovan',
         success: function (user) {
             loggedUser = user;
             if (user == null) {
@@ -54,9 +54,9 @@ $(document).ready(function () {
                 var brojSoba = parseInt($("#roomCount").val());
                 var brojGostiju = parseInt($("#guestCount").val());
                 var cena = parseInt($("#price").val());
-                var ulica = $("#street").val();
+                var ulicaIbr = $("#street").val();
                 var mesto = $("#place").val();
-                var postanskiBroj = $("#postalCode").val();
+                var postanskiBr = $("#postalCode").val();
                 var geoSirina = parseFloat($("#geoWid").val());
                 var geoDuzina = parseFloat($("#geoLen").val());
                 var vremePrijave = $("#checkin").val();
@@ -80,12 +80,12 @@ $(document).ready(function () {
                     }
                 }
 
-                adresa = new Adresa(ulica, mesto, postanskiBroj);
+                adresa = new Adresa(ulicaIbr, mesto, postanskiBr);
                 lokacija = new Lokacija(geoSirina, geoDuzina, adresa)
                 apartman = new Apartman(ime, brojSoba, brojGostiju, lokacija, cena, vremePrijave, vremeOdjave, pocetakDatum, krajDatum, slike, sadrzaji, tip);
 
                 $.ajax({
-                    url: '../rest/apartmans/',
+                    url: 'rest/apartmans/',
                     contentType: "application/json",
                     data: JSON.stringify(apartman),
                     type: 'POST',
@@ -312,7 +312,7 @@ $(document).ready(function () {
         document.getElementById('endRent').min = today;
 
         $.get({
-            url: '../rest/sadrzaj',
+            url: 'rest/sadrzaj',
             success: function (sadrzaji) {
                 for (let sadrzaj of sadrzaji) {
                     $('#amenities').append("<br/><input type=\"checkbox\" name=\"type\" id=\"" + sadrzaj.id + "\" class=\"agree-term\" /> <label for=\"" + sadrzaj.id + "\" class=\"label-agree-term\"><span><span></span></span>" + sadrzaj.naziv + "</label>");
@@ -395,7 +395,7 @@ function removeimg(id) {
 
 function logout() {
     return $.post({
-        url: '../rest/users/logout',
+        url: 'rest/users/logout',
         contentType: 'application/json',
         success: function () {
             localStorage.removeItem('jwt');
@@ -492,9 +492,9 @@ class Lokacija {
 }
 
 class Adresa {
-    constructor(ulica, mesto, postanskiBroj) {
-        this.ulica = ulica
+    constructor(ulicaIbr, mesto, postanskiBr) {
+        this.ulicaIbr = ulicaIbr
         this.mesto = mesto
-        this.postanskiBroj = postanskiBroj
+        this.postanskiBr = postanskiBr
     }
 }
