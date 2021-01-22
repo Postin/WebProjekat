@@ -19,6 +19,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -30,6 +31,7 @@ import javax.ws.rs.core.Response;
 
 import beans.Apartman;
 import beans.ApartmanDto;
+import beans.ApartmanZaDomacinaDto;
 import beans.Korisnik;
 import beans.SadrzajApartmana;
 import beans.SlikaDto;
@@ -59,6 +61,10 @@ public class ApartmanService {
 		
 		if(ctx.getAttribute("rezervacijaDAO") == null) {
 			ctx.setAttribute("rezervacijaDAO", new RezervacijaDAO(path));
+		}
+		
+		if(ctx.getAttribute("sadrzajDAO") == null) {
+			ctx.setAttribute("sadrzajDAO", new SadrzajApartmanaDAO(path));
 		}
 	}	
 	
@@ -110,10 +116,15 @@ public class ApartmanService {
 		}
 
 		ArrayList<SadrzajApartmana> sadrzajiApt = new ArrayList<SadrzajApartmana>();
-		SadrzajApartmanaDAO sadrzajDao = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDao"));
+		SadrzajApartmanaDAO sadrDao = ((SadrzajApartmanaDAO) ctx.getAttribute("sadrzajDAO"));
+		
+		ArrayList<SadrzajApartmana> sadrzajiAptBaza = new ArrayList<SadrzajApartmana>();
+		sadrzajiAptBaza.addAll(sadrDao.getSadrzaji().values());
 
 		for (Integer id2 : apt.getSadrzaji()) {
-			sadrzajiApt.add(sadrzajDao.getSadrzaji().get(id2));
+			System.out.println(apt.getSadrzaji());
+			
+			sadrzajiApt.add(sadrzajiAptBaza.get(id2));
 		}
 
 		if (apt.getTip().equals("SOBA")) {
@@ -187,6 +198,122 @@ public class ApartmanService {
 		
 		return Response.status(200).build();
 	}
+	
+	
+	//listaApartmana po odgovarajucim uslovima
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response vratiApartmane(@Context HttpServletRequest request) {
+		try {
+			Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
+			if (ulogovan == null) {
+				System.out.println("Neulogovani i neregistrovani korisnici");
+				return Response.status(200).entity(((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getActiveApartments())
+						.build();
+			} else {
+				if (ulogovan.getUloga().equals("GOST"))
+					return Response.status(200)
+							.entity(((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getActiveApartments()).build();
+				else if (ulogovan.getUloga().equals("DOMACIN")) {
+					return Response.status(200).entity(
+							((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getApartmentsByHost(ulogovan.getKorisnickoIme()))
+							.build();
+				} else if (ulogovan.getUloga().equals("ADMINISTRATOR")) {
+					ArrayList<Apartman> sviApartmani = new ArrayList<Apartman>(
+							((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getApartmani().values());
+					return Response.status(200).entity(sviApartmani).build();
+				}
+			}
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			;
+			return Response.status(400).entity("Error occured").build();
+		}
+		return Response.status(400).entity("Idk").build();
+
+	}
+	
+	//izmena atributa Apartmana
+	@PUT
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response izmeniApartman(@PathParam("id") Integer id, @Context HttpServletRequest request,
+			ApartmanZaDomacinaDto apt) {
+		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
+		if (ulogovan.getUloga().equals("GOST")) {
+			return Response.status(403).entity("Forbidden").build();
+		}
+
+		System.out.println("Zahtev za izmenu podataka apartmana: " + apt);
+
+		ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDAO"));
+		HashMap<Integer, Apartman> apts = aptDao.getApartmani();
+		Apartman a = apts.get(id);
+
+		if (a != null) {
+			a.setIme(apt.getIme());
+			a.setBrojSoba(apt.getBrojSoba());
+			a.setBrojGostiju(apt.getBrojGostiju());
+			a.setLokacija(apt.getLokacija());
+			a.setSlike(apt.getSlike());
+			a.setAktivan(apt.isAktivan());
+			a.setCenaPoNoci(apt.getCenaPoNoci());
+			a.setTip(apt.getTip());
+			apts.put(id, a);
+			aptDao.setApartmani(apts);
+			String path = ctx.getRealPath("");
+			aptDao.saveApartmans(path);
+			ctx.setAttribute("apartmanDAO", aptDao);
+			System.out.println("Uspesno izmenjen apartman!");
+			return Response.status(200).build();
+		}
+
+		else {
+			System.err.println("error occured on update");
+			return Response.status(400).entity("Apartman nije pronadjen!").build();
+		}
+
+	}
+	
+	//brisanje apartmana
+	@DELETE
+	@Path("/{id}")
+	public Response obrisiApartman(@PathParam("id") Integer id, @Context HttpServletRequest request) {
+		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
+		if (!ulogovan.getUloga().equals("DOMACIN") && !ulogovan.getUloga().equals("ADMINISTRATOR")) {
+			return Response.status(403).entity("Forbidden").build();
+		}
+		try {
+			ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDAO"));
+			Apartman a = aptDao.findApartmanById(id);
+			HashMap<Integer, Apartman> apts = aptDao.getApartmani();
+
+			if (a != null) {
+				if (!a.isObrisan()) {
+					a.setObrisan(true);
+					apts.put(id, a);
+					aptDao.setApartmani(apts);
+					String path = ctx.getRealPath("");
+					aptDao.saveApartmans(path);
+					ctx.setAttribute("apartmanDAO", aptDao);
+					return Response.status(200).entity("Apartman je obrisan!").build();
+				}
+				return Response.status(400).entity("Apartman je VEC obrisan!").build();
+			}
+
+			else {
+				System.err.println("error occured on delete");
+				return Response.status(400).entity("Apartman nije pronadjen!").build();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(500).entity("Internal server error").build();
+		}
+
+	}
+
 
 }
 
