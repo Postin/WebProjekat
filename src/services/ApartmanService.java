@@ -3,6 +3,7 @@ package services;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 
 import dao.ApartmanDAO;
@@ -17,7 +18,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -136,6 +136,7 @@ public class ApartmanService {
 			a.setTip("CEO");
 		}
 
+		a.setDomacin(ulogovan.getKorisnickoIme());
 		a.setId(id);
 		a.setIme(apt.getIme());
 		a.setBrojSoba(apt.getBrojSoba());
@@ -219,6 +220,7 @@ public class ApartmanService {
 					return Response.status(200)
 							.entity(((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getActiveApartments()).build();
 				else if (ulogovan.getUloga().equals("DOMACIN")) {
+					
 					return Response.status(200).entity(
 							((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getApartmentsByHost(ulogovan.getKorisnickoIme()))
 							.build();
@@ -238,47 +240,55 @@ public class ApartmanService {
 
 	}
 	
-	//izmena atributa Apartmana
-	@PUT
-//	@Path("/aaa/{id}")
-//	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response izmeniApartman(@QueryParam("id") Integer id, @QueryParam("tip") String tip, @QueryParam("ime") String ime, @QueryParam("brojSoba") Integer brojSoba, @QueryParam("brojGostiju") Integer brojGostiju, @QueryParam("lokacija") Lokacija lokacija, @QueryParam("cenaPoNoci") Integer cenaPoNoci, @QueryParam("aktivan") boolean aktivan, @Context HttpServletRequest request) {
-		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
-		if (ulogovan.getUloga().equals("GOST")) {
-			return Response.status(403).entity("Forbidden").build();
-		}
-
-		System.out.println("Zahtev za izmenu podataka apartmana: ");
-
-		ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDAO"));
-		HashMap<Integer, Apartman> apts = aptDao.getApartmani();
-		Apartman a = apts.get(id);
-
-		if (a != null) {
-			a.setIme(ime);
-			a.setBrojSoba(brojSoba);
-			a.setBrojGostiju(brojGostiju);
-			a.setLokacija(lokacija);
-	//		a.setSlike(apt.getSlike());
-			a.setAktivan(aktivan);
-			a.setCenaPoNoci(cenaPoNoci);
-			a.setTip(tip);
-			apts.put(id, a);
-			aptDao.setApartmani(apts);
-			String path = ctx.getRealPath("");
-			aptDao.saveApartmans(path);
-			ctx.setAttribute("apartmanDAO", aptDao);
-			System.out.println("Uspesno izmenjen apartman!");
-			return Response.status(200).build();
-		}
-
-		else {
-			System.err.println("error occured on update");
-			return Response.status(400).entity("Apartman nije pronadjen!").build();
-		}
-
-	}
+	
+	  //izmena atributa Apartmana
+	  
+	  @PUT // @Path("/aaa/{id}")
+	  @Path("/izmeni/{id}")
+	  @Produces(MediaType.APPLICATION_JSON)
+	  @Consumes(MediaType.APPLICATION_JSON)
+	  public Response izmeniApartman(ApartmanZaDomacinaDto dto, @PathParam("id") Integer id, @Context HttpServletRequest request) {
+		  Korisnik ulogovan = (Korisnik)request.getSession().getAttribute("loggedUser");
+		  if(ulogovan.getUloga().equals("GOST")) {
+			  return Response.status(403).entity("Forbidden").build();
+		  }
+	  
+	  System.out.println("Zahtev za izmenu podataka apartmana: ");
+	  System.out.println(dto.getIme());
+	  
+	  ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDAO"));
+	  HashMap<Integer, Apartman> apts = aptDao.getApartmani();
+	  Apartman a = apts.get(id);
+	  
+	  
+	  if (a != null) {
+		  a.setIme(dto.getIme());
+		  a.setBrojSoba(dto.getBrojSoba());
+		  a.setBrojGostiju(dto.getBrojGostiju());
+		  a.setLokacija(dto.getLokacija()); 
+		  //a.setSlike(dto.getSlike());
+		  a.setAktivan(dto.isAktivan());
+		  
+		  a.setCenaPoNoci(dto.getCenaPoNoci());
+		  a.setTip(dto.getTip());
+		  apts.put(id, a);
+		  aptDao.setApartmani(apts);
+		  String path = ctx.getRealPath("");
+		  aptDao.saveApartmans(path);
+		  ctx.setAttribute("apartmanDAO", aptDao);
+		  
+		  System.out.println("Uspesno izmenjen apartman!");
+		  return Response.status(200).build();
+	  }
+	  
+	  else {
+		  
+		  System.err.println("error occured on update");
+		  return Response.status(400).entity("Apartman nije pronadjen!").build(); 
+	  }
+	  
+  }
+	 
 	
 	//brisanje apartmana
 	@DELETE

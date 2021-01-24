@@ -118,10 +118,10 @@ public class ApartmanDAO {
 	        ArrayList<Apartman> apartmaniDomacina = new ArrayList<>();
 
 	        for (Apartman a : apartmani.values()) {
-	            System.out.println(a.toString());
+	            //System.out.println(a.toString());
 	                if (a.getDomacin().equals(username)) {
 	                	apartmaniDomacina.add(a);
-	        }
+	                }
 	        }
 	        System.out.println(this.apartmani);
 	        return apartmaniDomacina;

@@ -300,8 +300,8 @@ $(document).ready(function () {
                 
                 //objekti
                 adresa = new Adresa(mesto, ulicaIbr, postanskiBr);
-                lokacija = new Lokacija(adresa, geoSirina, geoDuzina)
-                ApartmanZaDomacinaDto = new ApartmanZaDomacinaDto(tip, ime, brojSoba, brojGostiju, lokacija, cenaPoNoci, aktivan);
+                lokacija = new Lokacija(adresa, geoSirina, geoDuzina);
+                apartmanZaDomacinaDto = new ApartmanZaDomacinaDto(tip, ime, brojSoba, brojGostiju, lokacija, cenaPoNoci, aktivan);
                 
                 
                 //kolona za dugme SAVE
@@ -314,9 +314,9 @@ $(document).ready(function () {
                     e.preventDefault();
                    
                     $.ajax({
-                        url: 'rest/apartmans?id=' + apart.id + "&tip=" + tip + "&ime=" + ime + "&brojSoba=" + brojSoba + "&brojGostiju=" +brojGostiju+ "&lokacija=" +lokacija+ "&cenaPoNoci=" +cenaPoNoci+ "&aktivan=" +aktivan,
+                        url:'rest/apartmans/izmeni/'+apart.id, 
                         type: 'PUT',
-               //         data: JSON.stringify(),
+                        data: JSON.stringify({tip, ime, brojSoba, brojGostiju, lokacija, cenaPoNoci, aktivan}),
                         contentType: 'application/json',
                         success: function () {
                             location.reload();
