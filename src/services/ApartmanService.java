@@ -25,6 +25,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -33,6 +34,7 @@ import beans.Apartman;
 import beans.ApartmanDto;
 import beans.ApartmanZaDomacinaDto;
 import beans.Korisnik;
+import beans.Lokacija;
 import beans.SadrzajApartmana;
 import beans.SlikaDto;
 import beans.TipApartmana;
@@ -94,6 +96,7 @@ public class ApartmanService {
 	} */
 	
 	@POST
+	@Path("/add")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addApartment(@Context HttpServletRequest request, ApartmanDto apt) {
@@ -202,6 +205,7 @@ public class ApartmanService {
 	
 	//listaApartmana po odgovarajucim uslovima
 	@GET
+	@Path("/listApartmans")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response vratiApartmane(@Context HttpServletRequest request) {
 		try {
@@ -236,31 +240,30 @@ public class ApartmanService {
 	
 	//izmena atributa Apartmana
 	@PUT
-	@Path("/{id}")
+//	@Path("/aaa/{id}")
+//	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response izmeniApartman(@PathParam("id") Integer id, @Context HttpServletRequest request,
-			ApartmanZaDomacinaDto apt) {
+	public Response izmeniApartman(@QueryParam("id") Integer id, @QueryParam("tip") String tip, @QueryParam("ime") String ime, @QueryParam("brojSoba") Integer brojSoba, @QueryParam("brojGostiju") Integer brojGostiju, @QueryParam("lokacija") Lokacija lokacija, @QueryParam("cenaPoNoci") Integer cenaPoNoci, @QueryParam("aktivan") boolean aktivan, @Context HttpServletRequest request) {
 		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
 		if (ulogovan.getUloga().equals("GOST")) {
 			return Response.status(403).entity("Forbidden").build();
 		}
 
-		System.out.println("Zahtev za izmenu podataka apartmana: " + apt);
+		System.out.println("Zahtev za izmenu podataka apartmana: ");
 
 		ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDAO"));
 		HashMap<Integer, Apartman> apts = aptDao.getApartmani();
 		Apartman a = apts.get(id);
 
 		if (a != null) {
-			a.setIme(apt.getIme());
-			a.setBrojSoba(apt.getBrojSoba());
-			a.setBrojGostiju(apt.getBrojGostiju());
-			a.setLokacija(apt.getLokacija());
-			a.setSlike(apt.getSlike());
-			a.setAktivan(apt.isAktivan());
-			a.setCenaPoNoci(apt.getCenaPoNoci());
-			a.setTip(apt.getTip());
+			a.setIme(ime);
+			a.setBrojSoba(brojSoba);
+			a.setBrojGostiju(brojGostiju);
+			a.setLokacija(lokacija);
+	//		a.setSlike(apt.getSlike());
+			a.setAktivan(aktivan);
+			a.setCenaPoNoci(cenaPoNoci);
+			a.setTip(tip);
 			apts.put(id, a);
 			aptDao.setApartmani(apts);
 			String path = ctx.getRealPath("");

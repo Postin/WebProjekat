@@ -85,7 +85,7 @@ $(document).ready(function () {
                 apartman = new Apartman(ime, brojSoba, brojGostiju, lokacija, cena, vremePrijave, vremeOdjave, pocetakDatum, krajDatum, slike, sadrzaji, tip);
 
                 $.ajax({
-                    url: 'rest/apartmans',
+                    url: 'rest/apartmans/add',
                     contentType: "application/json",
                     data: JSON.stringify(apartman),
                     type: 'POST',

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class ApartmanZaDomacinaDto {
 	
+	
 	private String tip;
 	private String ime;
 	private int brojSoba;
@@ -20,15 +21,14 @@ public class ApartmanZaDomacinaDto {
 	}
 
 
-	public ApartmanZaDomacinaDto(String tip, String ime, int brojSoba, int brojGostiju, Lokacija lokacija,
-			ArrayList<String> slike, int cenaPoNoci, boolean aktivan) {
+	public ApartmanZaDomacinaDto(String tip, String ime, int brojSoba, int brojGostiju, Lokacija lokacija, int cenaPoNoci, boolean aktivan) {
 		super();
 		this.tip = tip;
 		this.ime = ime;
 		this.brojSoba = brojSoba;
 		this.brojGostiju = brojGostiju;
 		this.lokacija = lokacija;
-		this.slike = slike;
+		
 		this.cenaPoNoci = cenaPoNoci;
 		this.aktivan = aktivan;
 	}
