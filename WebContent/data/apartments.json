@@ -23,6 +23,7 @@
     "vremeZaPrijavu" : "14:00",
     "vremeZaOdjavu" : "10:00",
     "aktivan" : true,
+    "obrisan" : false,
     "sadrzaj" : [{"id" : 11,"naziv" :"bazen za decu","obrisan" :false} ]
     
  	}

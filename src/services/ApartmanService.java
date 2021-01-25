@@ -256,6 +256,7 @@ public class ApartmanService {
 	  System.out.println("Zahtev za izmenu podataka apartmana: ");
 	  System.out.println(dto.getIme());
 	  
+	  
 	  ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDAO"));
 	  HashMap<Integer, Apartman> apts = aptDao.getApartmani();
 	  Apartman a = apts.get(id);
@@ -264,6 +265,7 @@ public class ApartmanService {
 	  if (a != null) {
 		  a.setIme(dto.getIme());
 		  a.setBrojSoba(dto.getBrojSoba());
+		  System.out.println(a.getBrojSoba());
 		  a.setBrojGostiju(dto.getBrojGostiju());
 		  a.setLokacija(dto.getLokacija()); 
 		  //a.setSlike(dto.getSlike());
@@ -276,6 +278,8 @@ public class ApartmanService {
 		  String path = ctx.getRealPath("");
 		  aptDao.saveApartmans(path);
 		  ctx.setAttribute("apartmanDAO", aptDao);
+		  System.out.println(a.getBrojSoba());
+		  System.out.println(dto.isAktivan());
 		  
 		  System.out.println("Uspesno izmenjen apartman!");
 		  return Response.status(200).build();
@@ -294,6 +298,8 @@ public class ApartmanService {
 	@DELETE
 	@Path("/{id}")
 	public Response obrisiApartman(@PathParam("id") Integer id, @Context HttpServletRequest request) {
+		 System.out.println("Usao u metodu brisanja ");
+		
 		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
 		if (!ulogovan.getUloga().equals("DOMACIN") && !ulogovan.getUloga().equals("ADMINISTRATOR")) {
 			return Response.status(403).entity("Forbidden").build();

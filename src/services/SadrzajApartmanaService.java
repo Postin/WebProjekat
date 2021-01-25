@@ -104,7 +104,7 @@ public class SadrzajApartmanaService {
 			ApartmanDAO aptDao = ((ApartmanDAO) ctx.getAttribute("apartmanDAO"));
 
 			for (Apartman apt : aptDao.getApartmani().values()) {
-				for (SadrzajApartmana sa : apt.getSadrzaj()) { // can I get an amen
+				for (SadrzajApartmana sa : apt.getSadrzaj()) { 
 					if (sa.getId() == id) {
 						apt.getSadrzaj().remove(sa);
 					}

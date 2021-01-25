@@ -58,7 +58,7 @@ public class ApartmanDAO {
 	
 	//nadji apartman po id-u
 	public Apartman findApartmanById(Integer id) {
-		if(this.apartmani.containsKey(id)) {
+		if(this.apartmani.containsKey(id) ) {
 			return this.apartmani.get(id);
 		}
 		
@@ -79,7 +79,10 @@ public class ApartmanDAO {
 	public ArrayList<Apartman> getApartmaniList() {
 		ArrayList<Apartman> apartmaniList = new ArrayList<Apartman>();
 		for (Apartman a : apartmani.values()) {
-			apartmaniList.add(a);
+			if(!a.isObrisan()) {
+				apartmaniList.add(a);
+			}
+			
 		}
 		return apartmaniList;
 	}
@@ -89,7 +92,7 @@ public class ApartmanDAO {
         ArrayList<Apartman> activeApts = new ArrayList<>();
 
         for (Apartman a : apartmani.values()) {
-            if (a.isAktivan())
+            if (a.isAktivan() && !a.isObrisan())
                 activeApts.add(a);
         }
 
@@ -119,7 +122,7 @@ public class ApartmanDAO {
 
 	        for (Apartman a : apartmani.values()) {
 	            //System.out.println(a.toString());
-	                if (a.getDomacin().equals(username)) {
+	                if (a.getDomacin().equals(username) && !a.isObrisan()) {
 	                	apartmaniDomacina.add(a);
 	                }
 	        }

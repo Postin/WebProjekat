@@ -33,10 +33,10 @@ $(document).ready(function () {
                
                 newText2.onkeyup = function () {
                     var txt2 = document.getElementById("value2" + apart.id).value;
-                    
-                    
                     if (txt2 === "") {
+                    	
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Ime ne sme biti prazno!");
                         return;
                     }
                     if (txt2 !== apart.ime) {
@@ -56,13 +56,15 @@ $(document).ready(function () {
                 newText3.setAttribute("type", "text");
                 newText3.setAttribute("value", apart.tip);
                 newText3.setAttribute("id", "value3" + apart.id);
-               
+                
                 newText3.onkeyup = function () {
                     var txt3 = document.getElementById("value3" + apart.id).value;
                     if (txt3 === "") {
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Tip ne sme biti prazno polje!");
                         return;
                     }
+                  
                     if (txt3 !== apart.tip) {
                         document.getElementById('save' + apart.id).disabled = false;
                     }
@@ -70,27 +72,56 @@ $(document).ready(function () {
                         document.getElementById('save' + apart.id).disabled = true;
                     }
                 };
-                newCell3.appendChild(newText3);
                 
+                newText3.onblur = function () {
+                	 var txt3 = document.getElementById("value3" + apart.id).value;
+                	 if(txt3 === "SOBA" || txt3 === "soba" || txt3 === "CEO" || txt3 === "ceo"){
+                     	document.getElementById('save' + apart.id).disabled = false;
+                        return;
+                     } 
+                	 else{
+                		 document.getElementById('save' + apart.id).disabled = true;
+                		 alert("Postoje 2 vrste tipa: SOBA ili CEO!");
+                	 }
+                };
+               
+                newCell3.appendChild(newText3);
+                             
                 
               //kolona za aktivan
                 var newCell4 = newRow.insertCell(2);
                 var newText4 = document.createElement('input');
                
-                newText4.setAttribute("type", "checkbox");
+                newText4.setAttribute("type", "text");
                 newText4.setAttribute("value", apart.aktivan);
                 newText4.setAttribute("id", "value4" + apart.id);
                
                 newText4.onkeyup = function () {
                     var txt4 = document.getElementById("value4" + apart.id).value;
-                   
-                    if (txt4 !== apart.aktivan) {
+                    if(txt4 === ""){
+                    	document.getElementById('save' + apart.id).disabled = true;
+                        alert("Aktivnost ne sme biti prazno polje! (True=aktivan / False=neaktivan)");
+                        return;
+                    }
+                    
+                   if (txt4 !== apart.aktivan) {
                         document.getElementById('save' + apart.id).disabled = false;
                     }
                     else {
                         document.getElementById('save' + apart.id).disabled = true;
                     }
                 };
+                newText4.onblur = function () {
+               	 var txt4 = document.getElementById("value4" + apart.id).value;
+               	 if(txt4 === "true" || txt4 === "false"){
+                 	document.getElementById('save' + apart.id).disabled = false;
+                    return;
+                 }
+               	 else{
+               		 document.getElementById('save' + apart.id).disabled = true;
+               		 alert("true=aktivan / false=neaktivan!");
+               	 }
+               };
                 newCell4.appendChild(newText4);
                 
                 
@@ -98,14 +129,15 @@ $(document).ready(function () {
                 var newCell5 = newRow.insertCell(3);
                 var newText5 = document.createElement('input');
                
-                newText5.setAttribute("type", "text");
+                newText5.setAttribute("type", "number");
                 newText5.setAttribute("value", apart.cenaPoNoci);
                 newText5.setAttribute("id", "value5" + apart.id);
                
                 newText5.onkeyup = function () {
                     var txt5 = document.getElementById("value5" + apart.id).value;
-                    if (txt5 === "") {
+                    if (txt5 === "" || txt5 < 1) {
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Cena ne sme biti prazno polje niti negativan broj!");
                         return;
                     }
                     if (txt5 !== apart.cenaPoNoci) {
@@ -128,8 +160,9 @@ $(document).ready(function () {
                
                 newText6.onkeyup = function () {
                     var txt6 = document.getElementById("value6" + apart.id).value;
-                    if (txt6 === "") {
+                    if (txt6 === "" || txt6 < 1) {
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Broj soba ne sme biti prazno polje niti negativan broj!");
                         return;
                     }
                     if (txt6 !== apart.brojSoba) {
@@ -152,8 +185,9 @@ $(document).ready(function () {
                
                 newText7.onkeyup = function () {
                     var txt7 = document.getElementById("value7" + apart.id).value;
-                    if (txt7 === "") {
+                    if (txt7 === "" || txt7 < 1) {
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Broj gostiju ne sme biti prazno polje niti negativan broj!");
                         return;
                     }
                     if (txt7 !== apart.brojGostiju) {
@@ -178,6 +212,7 @@ $(document).ready(function () {
                     var txt8 = document.getElementById("value8" + apart.id).value;
                     if (txt8 === "") {
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Mesto ne sme biti prazno polje!");
                         return;
                     }
                     if (txt8 !== apart.lokacija.adresa.mesto) {
@@ -202,6 +237,7 @@ $(document).ready(function () {
                     var txt9 = document.getElementById("value9" + apart.id).value;
                     if (txt9 === "") {
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Ulica ne sme biti prazno polje!");
                         return;
                     }
                     if (txt9 !== apart.lokacija.adresa.ulicaIbr) {
@@ -226,6 +262,7 @@ $(document).ready(function () {
                     var txt10 = document.getElementById("value10" + apart.id).value;
                     if (txt10 === "") {
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Postanski broj ne sme biti prazno polje!");
                         return;
                     }
                     if (txt10 !== apart.lokacija.adresa.postanskiBr) {
@@ -235,6 +272,20 @@ $(document).ready(function () {
                         document.getElementById('save' + apart.id).disabled = true;
                     }
                 };
+                newText10.onblur = function () {
+                  	 var txt10 = document.getElementById("value10" + apart.id).value;
+                  	 if(txt10.length === 5){
+                    	document.getElementById('save' + apart.id).disabled = false;
+                    	
+                       return;
+                    }
+                  	 else{
+                  		 document.getElementById('save' + apart.id).disabled = true;
+                  		alert("Postanski broj mora imati tacno 5 cifara!");
+                  		 
+                  	 }
+                  };
+                
                 newCell10.appendChild(newText10);
                 
                 
@@ -250,6 +301,7 @@ $(document).ready(function () {
                     var txt11 = document.getElementById("value11" + apart.id).value;
                     if (txt11 === "") {
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Geografska sirina ne sme biti prazno polje!");
                         return;
                     }
                     if (txt11 !== apart.lokacija.geoSirina) {
@@ -274,6 +326,7 @@ $(document).ready(function () {
                     var txt12 = document.getElementById("value12" + apart.id).value;
                     if (txt12 === "") {
                         document.getElementById('save' + apart.id).disabled = true;
+                        alert("Geografska duzina ne sme biti prazno polje!");
                         return;
                     }
                     if (txt12 !== apart.lokacija.geoDuzina) {
@@ -285,23 +338,11 @@ $(document).ready(function () {
                 };
                 newCell12.appendChild(newText12);
                 
-                //parametri objekta Apartman
-                var ime = document.getElementById("value2" + apart.id).value;
-                var tip = document.getElementById("value3" + apart.id).value;
-                var aktivan = document.getElementById("value4" + apart.id).value;
-                var cenaPoNoci = document.getElementById("value5" + apart.id).value;
-                var brojSoba = document.getElementById("value6" + apart.id).value;
-                var brojGostiju = document.getElementById("value7" + apart.id).value;
-                var mesto = document.getElementById("value8" + apart.id).value;
-                var ulicaIbr = document.getElementById("value9" + apart.id).value;
-                var postanskiBr = document.getElementById("value10" + apart.id).value;
-                var geoSirina = document.getElementById("value11" + apart.id).value;
-                var geoDuzina = document.getElementById("value12" + apart.id).value;
+               
                 
                 //objekti
-                adresa = new Adresa(mesto, ulicaIbr, postanskiBr);
-                lokacija = new Lokacija(adresa, geoSirina, geoDuzina);
-                apartmanZaDomacinaDto = new ApartmanZaDomacinaDto(tip, ime, brojSoba, brojGostiju, lokacija, cenaPoNoci, aktivan);
+              
+      //          apartmanZaDomacinaDto = new ApartmanZaDomacinaDto(tip, ime, brojSoba, brojGostiju, lokacija, cenaPoNoci, aktivan);
                 
                 
                 //kolona za dugme SAVE
@@ -313,6 +354,22 @@ $(document).ready(function () {
                 editBtn.onclick = function (e) {
                     e.preventDefault();
                    
+                    //parametri objekta Apartman
+                    var ime = document.getElementById("value2" + apart.id).value;
+                    var tip = document.getElementById("value3" + apart.id).value;
+                    var aktivan = document.getElementById("value4" + apart.id).value;
+                    var cenaPoNoci = document.getElementById("value5" + apart.id).value;
+                    var brojSoba = document.getElementById("value6" + apart.id).value;
+                    var brojGostiju = document.getElementById("value7" + apart.id).value;
+                    var mesto = document.getElementById("value8" + apart.id).value;
+                    var ulicaIbr = document.getElementById("value9" + apart.id).value;
+                    var postanskiBr = document.getElementById("value10" + apart.id).value;
+                    var geoSirina = document.getElementById("value11" + apart.id).value;
+                    var geoDuzina = document.getElementById("value12" + apart.id).value;
+                    
+                    adresa = new Adresa(mesto, ulicaIbr, postanskiBr);
+                    lokacija = new Lokacija(adresa, geoSirina, geoDuzina);
+                    
                     $.ajax({
                         url:'rest/apartmans/izmeni/'+apart.id, 
                         type: 'PUT',
@@ -320,6 +377,7 @@ $(document).ready(function () {
                         contentType: 'application/json',
                         success: function () {
                             location.reload();
+                            
                         }
                     });
                 }
