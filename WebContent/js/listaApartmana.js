@@ -1,24 +1,28 @@
 $(document).ready(function () {
-    loggedUser = null;
-    $.get({
+   
+	var loggedUser = null;
+   
+	$.get({
         url: 'rest/users/ulogovan',
         success: function (user) {
-            loggedUser = user;
-            generateToolBar(user);
-//            if (user == null || user.uloga != "ADMINISTRATOR") {
-//                window.location = "../";
-//                return;
- //           }
+        	
+        	loggedUser = user;
+            generateToolBar(loggedUser);
         }
-    });
+	});
+    
+    
+   
 
     
     $.get({
         url: 'rest/apartmans/listApartmans',
         success: function (data) {
+        	
             for (let apart of data) {
             	console.log(apart.id);
             	console.log(apart.ime);
+            	
                 var tableRef = document.getElementById('apartmani').getElementsByTagName('tbody')[0];
                 var newRow = tableRef.insertRow();
                 
@@ -404,31 +408,66 @@ $(document).ready(function () {
 
             }
         }
-    });
+    	
+    
+    		});
+ 
 });
 
-function generateToolBar(user) {
+function generateToolBar(loggedUser) {
 
-    if (user != null) {
-        if (user.uloga === "DOMACIN") {
-            var novApartman = document.createElement('a');
+	
+    if (loggedUser != null) {
+        if (loggedUser.uloga === "DOMACIN") {
+        	
+        	
+        	var novApartman = document.createElement('a');
             novApartman.innerHTML = "Dodaj apartman";
             novApartman.setAttribute('data-toggle', 'tooltip');
             novApartman.setAttribute('href', 'dodajApartman.html');
             novApartman.setAttribute('data-toggle', 'tooltip');
             document.getElementById("toolbar").appendChild(novApartman);
+            
+            var back = document.createElement('a');
+            back.innerHTML = "Back";
+            back.setAttribute('data-toggle', 'tooltip');
+            back.setAttribute('href', 'domacin.html');
+            back.setAttribute('data-toggle', 'tooltip');
+            document.getElementById("toolbar").appendChild(back);
+            
+  //          $('#toolbar').append("<a href=\"domacin.html\" id=\"domacin\" data-toggle=\"tooltip\" title=\"toggle search bar\">Back</a>");
+            
+           
+            
         //    $('#toolbar').append("<a href=\"userList.html\" id=\"userList\" data-toggle=\"tooltip\" title=\"toggle search bar\">User List</a>");
       
         
-        } else if (user.uloga === "ADMINISTRATOR") {
-            var sadrzaji = document.createElement('s');
+        } else if (loggedUser.uloga === "ADMINISTRATOR") {
+            var sadrzaji = document.createElement('a');
             sadrzaji.innerHTML = "Sadrzaji";
             sadrzaji.setAttribute('data-toggle', 'tooltip');
             sadrzaji.setAttribute('href', 'sadrzajApartmana.html');
             sadrzaji.setAttribute('data-toggle', 'tooltip');
             document.getElementById("toolbar").appendChild(sadrzaji);
+            
+            var back = document.createElement('a');
+            back.innerHTML = "Back";
+            back.setAttribute('data-toggle', 'tooltip');
+            back.setAttribute('href', 'administrator.html');
+            back.setAttribute('data-toggle', 'tooltip');
+            document.getElementById("toolbar").appendChild(back);
+            
       //      $('#toolbar').append("<a href=\"userList.html\" id=\"userList\" data-toggle=\"tooltip\" title=\"toggle search bar\">User List</a>");
       //      $('#toolbar').append("<a href=\"holidays.html\" id=\"holidays\" data-toggle=\"tooltip\" title=\"toggle search bar\">Holidays</a>");
+        } else if (loggedUser.uloga === "GOST") {
+           
+            var back = document.createElement('a');
+            back.innerHTML = "Back";
+            back.setAttribute('data-toggle', 'tooltip');
+            back.setAttribute('href', 'gost.html');
+            back.setAttribute('data-toggle', 'tooltip');
+            document.getElementById("toolbar").appendChild(back);
+        
         }
 
   //      $('#toolbar').append("<a href=\"reservations.html\" id=\"reservations\" data-toggle=\"tooltip\" title=\"toggle search bar\">Reservations</a>");
@@ -458,6 +497,8 @@ function generateToolBar(user) {
         $("#toolbar").append("<a href=\"login.html\" data-toggle=\"tooltip\" >Login</a><a href=\"registration.html\" data-toggle=\"tooltip\">Register</a>");
     }
 }
+
+
 
 function logout() {
     return $.post({

@@ -101,7 +101,8 @@ public class KorisnikService {
 	 @Path("/ulogovan")
 	 @Produces(MediaType.APPLICATION_JSON)
 	  	public Korisnik currentUser(@Context HttpServletRequest request) {
-	        return (Korisnik) request.getSession().getAttribute("loggedUser");
+		// 	System.out.println("Pretrazuje ulogovanog");
+		 	return (Korisnik) request.getSession().getAttribute("loggedUser");
 	    }
 	
 	@GET
