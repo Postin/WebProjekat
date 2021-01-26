@@ -171,7 +171,7 @@ public class ApartmanService {
 	@GET
 	@Path("/availableDates/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response availableDates(@Context HttpServletRequest request, @PathParam(value = "id") Integer aptId) {
+	public Response dostupniDatumi(@Context HttpServletRequest request, @PathParam(value = "id") Integer aptId) {
 	
 		System.out.println("Primljen je zahtev za potraznju dostupnih datuma za apartman sa id:  " + aptId);
 	
@@ -332,6 +332,36 @@ public class ApartmanService {
 		}
 
 	}
+	
+	
+	//listaApartmana za pretragu
+		@GET
+		@Path("/listaZaPretragu")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response vratiApartmaneZaPretragu(@Context HttpServletRequest request) {
+			try {
+				Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
+				if (ulogovan == null || ulogovan.getUloga().equals("GOST") || ulogovan.getUloga().equals("DOMACIN") ) {
+					System.out.println("Vrati aktivne apartmane");
+					return Response.status(200).entity(((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getActiveApartments()).build();
+				
+				}else if (ulogovan.getUloga().equals("ADMINISTRATOR")) {
+						ArrayList<Apartman> sviApartmani = new ArrayList<Apartman>(
+								((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getApartmaniList());
+						return Response.status(200).entity(sviApartmani).build();
+					}
+				
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+				;
+				return Response.status(400).entity("Error occured").build();
+			}
+			return Response.status(400).entity("Idk").build();
+
+		}
+		
+
+
 
 
 }
