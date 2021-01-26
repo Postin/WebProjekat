@@ -11,8 +11,8 @@ public class Apartman {
 	private int brojSoba;
 	private int brojGostiju;
 	private Lokacija lokacija;
-	private ArrayList<LocalDate> datumiZaIzdavanje = new ArrayList<LocalDate>();
-	private ArrayList<LocalDate> dostupnostPoDatumima = new ArrayList<LocalDate>();
+	private ArrayList<String> datumiZaIzdavanje = new ArrayList<String>();
+	private ArrayList<String> dostupnostPoDatumima = new ArrayList<String>();
 	private String domacin; //korisnicko ime
 	private ArrayList<Komentar> komentari;
 	//private String vremeZaPrijavu;
@@ -23,8 +23,8 @@ public class Apartman {
 	
 	private ArrayList<String> slike = new ArrayList<String>();
 	private int cenaPoNoci;
-	private LocalTime vremeZaPrijavu = LocalTime.of(14,0,0,0);
-	private LocalTime vremeZaOdjavu = LocalTime.of(10,0,0,0);
+	private String vremeZaPrijavu;
+	private String vremeZaOdjavu;
 	private boolean aktivan=true;
 	private boolean obrisan;
 	private ArrayList<SadrzajApartmana> sadrzaj = new ArrayList<SadrzajApartmana>();
@@ -34,9 +34,9 @@ public class Apartman {
 		super();
 	}
 
-	public Apartman(Integer id,String ime, String tip, int brojSoba, int brojGostiju, Lokacija lok, ArrayList<LocalDate> datumiZaIzdavanje,
-			ArrayList<LocalDate> dostupnostPoDatumima, String domacin, ArrayList<Komentar> komentari,
-			ArrayList<String> slike, int cenaPoNoci, LocalTime vremeZaPrijavu, LocalTime vremeZaOdjavu, boolean aktivan, 
+	public Apartman(Integer id,String ime, String tip, int brojSoba, int brojGostiju, Lokacija lok, ArrayList<String> datumiZaIzdavanje,
+			ArrayList<String> dostupnostPoDatumima, String domacin, ArrayList<Komentar> komentari,
+			ArrayList<String> slike, int cenaPoNoci, String vremeZaPrijavu, String vremeZaOdjavu, boolean aktivan, 
 			ArrayList<SadrzajApartmana>sadrzaj, ArrayList<Rezervacija>rezervacija) {
 
 		this.id = id;
@@ -110,19 +110,19 @@ public class Apartman {
 		this.lokacija = lokacija;
 	}
 
-	public ArrayList<LocalDate> getDatumiZaIzdavanje() {
+	public ArrayList<String> getDatumiZaIzdavanje() {
 		return datumiZaIzdavanje;
 	}
 
-	public void setDatumiZaIzdavanje(ArrayList<LocalDate> datumiZaIzdavanje) {
+	public void setDatumiZaIzdavanje(ArrayList<String> datumiZaIzdavanje) {
 		this.datumiZaIzdavanje = datumiZaIzdavanje;
 	}
 
-	public ArrayList<LocalDate> getDostupnostPoDatumima() {
+	public ArrayList<String> getDostupnostPoDatumima() {
 		return dostupnostPoDatumima;
 	}
 
-	public void setDostupnostPoDatumima(ArrayList<LocalDate> dostupnostPoDatumima) {
+	public void setDostupnostPoDatumima(ArrayList<String> dostupnostPoDatumima) {
 		this.dostupnostPoDatumima = dostupnostPoDatumima;
 	}
 
@@ -158,19 +158,19 @@ public class Apartman {
 		this.cenaPoNoci = cenaPoNoci;
 	}
 
-	public LocalTime getVremeZaPrijavu() {
+	public String getVremeZaPrijavu() {
 		return vremeZaPrijavu;
 	}
 
-	public void setVremeZaPrijavu(LocalTime vremeZaPrijavu) {
+	public void setVremeZaPrijavu(String vremeZaPrijavu) {
 		this.vremeZaPrijavu = vremeZaPrijavu;
 	}
 
-	public LocalTime getVremeZaOdjavu() {
+	public String getVremeZaOdjavu() {
 		return vremeZaOdjavu;
 	}
 
-	public void setVremeZaOdjavu(LocalTime vremeZaOdjavu) {
+	public void setVremeZaOdjavu(String vremeZaOdjavu) {
 		this.vremeZaOdjavu = vremeZaOdjavu;
 	}
 

@@ -11,6 +11,7 @@ $(document).ready(function () {
     $.get({
         url: 'rest/users/ulogovan',
         success: function (user) {
+        	
             loggedUser = user;
             if (user == null) {
                 window.location = "../";
@@ -85,13 +86,13 @@ $(document).ready(function () {
                 apartman = new Apartman(ime, brojSoba, brojGostiju, lokacija, cena, vremePrijave, vremeOdjave, pocetakDatum, krajDatum, slike, sadrzaji, tip);
 
                 $.ajax({
-                    url: 'rest/apartmans/',
+                    url: 'rest/apartmans/add',
                     contentType: "application/json",
                     data: JSON.stringify(apartman),
                     type: 'POST',
                     success: function () {
                         alert('Apartman je dodat!')
-                   //     window.location = "ads.html"
+                        window.location = "listaApartmana.html"
                     },
                     error: function (f) {
                         alert(f.responseText)
@@ -326,6 +327,7 @@ $(document).ready(function () {
 
 
 function generateToolBar(user) {
+	alert("usao");
 
     if (user != null) {
     	 if (user.uloga === "DOMACIN") {
@@ -335,10 +337,18 @@ function generateToolBar(user) {
              novApartman.setAttribute('href', 'dodajApartman.html');
              novApartman.setAttribute('data-toggle', 'tooltip');
              document.getElementById("toolbar").appendChild(novApartman);
+             
+             var back = document.createElement('a');
+             back.innerHTML = "Back";
+             back.setAttribute('data-toggle', 'tooltip');
+             back.setAttribute('href', 'domacin.html');
+             back.setAttribute('data-toggle', 'tooltip');
+             document.getElementById("toolbar").appendChild(back);
+             
          //    $('#toolbar').append("<a href=\"userList.html\" id=\"userList\" data-toggle=\"tooltip\" title=\"toggle search bar\">User List</a>");
     	
     	 } else if (user.uloga === "ADMINISTRATOR") {
-             var sadrzaji = document.createElement('s');
+             var sadrzaji = document.createElement('a');
              sadrzaji.innerHTML = "Sadrzaji";
              sadrzaji.setAttribute('data-toggle', 'tooltip');
              sadrzaji.setAttribute('href', 'sadrzajApartmana.html');

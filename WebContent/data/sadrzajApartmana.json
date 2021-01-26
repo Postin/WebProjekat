@@ -1,3 +1,33 @@
 {
+	"1" : {
+		"id" :1,
+		"naziv" :"WiFi",
+		"obrisan" :false
+	},
+	"2" : {
+		"id" :2,
+		"naziv" :"Kablovska",
+		"obrisan" :false
+	},
+	"3" : {
+		"id" :3,
+		"naziv" :"Parking",
+		"obrisan" :false
+	},
+	"4" : {
+		"id" :4,
+		"naziv" :"Kuhinja",
+		"obrisan" :false
+	},
+	"5" : {
+		"id" :5,
+		"naziv" :"Pegla",
+		"obrisan" :false
+	},
+	"6" : {
+		"id" :6,
+		"naziv" :"Ves masina",
+		"obrisan" :false
+	}
 
 }

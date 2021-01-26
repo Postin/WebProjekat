@@ -100,7 +100,7 @@ $(document).ready(function () {
 });
 
 function generateToolBar(user) {
-
+	
     if (user != null) {
         if (user.uloga === "DOMACIN") {
             var novApartman = document.createElement('a');
@@ -113,12 +113,20 @@ function generateToolBar(user) {
       
         
         } else if (user.uloga === "ADMINISTRATOR") {
-            var sadrzaji = document.createElement('s');
+            var sadrzaji = document.createElement('a');
             sadrzaji.innerHTML = "Sadrzaji";
             sadrzaji.setAttribute('data-toggle', 'tooltip');
             sadrzaji.setAttribute('href', 'sadrzajApartmana.html');
             sadrzaji.setAttribute('data-toggle', 'tooltip');
             document.getElementById("toolbar").appendChild(sadrzaji);
+            
+            var back = document.createElement('a');
+            back.innerHTML = "Back";
+            back.setAttribute('data-toggle', 'tooltip');
+            back.setAttribute('href', 'administrator.html');
+            back.setAttribute('data-toggle', 'tooltip');
+            document.getElementById("toolbar").appendChild(back);
+            
       //      $('#toolbar').append("<a href=\"userList.html\" id=\"userList\" data-toggle=\"tooltip\" title=\"toggle search bar\">User List</a>");
       //      $('#toolbar').append("<a href=\"holidays.html\" id=\"holidays\" data-toggle=\"tooltip\" title=\"toggle search bar\">Holidays</a>");
         }

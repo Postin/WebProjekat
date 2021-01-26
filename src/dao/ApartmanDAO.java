@@ -30,7 +30,7 @@ public class ApartmanDAO {
 	private HashMap<Integer, Apartman> apartmani = new HashMap<Integer, Apartman>();
 
 	public ApartmanDAO(String path) {
-		loadApartments(path);
+		loadApartmans(path);
 		/*
 		 * apartmani.put(id1, new Apartman(id1,TipApartmana.CEO,3,4, new
 		 * Lokacija(14.12,57.12, new Adresa("Brace Dronjak 15","Novi Sad",21000)),null,
@@ -45,29 +45,7 @@ public class ApartmanDAO {
 		 */
 	}
 	
-	public void loadApartments(String path) {
-		BufferedReader in = null;
-		try {
-			File file = new File(path + "/data/apartments.json");
-			in = new BufferedReader(new FileReader(file));
-			String line;
-			StringBuilder sb = new StringBuilder();
-			while ((line = in.readLine()) != null) {
-				sb.append(line);
-			}
-			ObjectMapper mapper = new ObjectMapper();
-			this.apartmani = mapper.readValue(sb.toString(), new TypeReference<Map<Integer, Apartman>>(){});
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (Exception e) {}
-			}
-		}
-	}
-
+	
 	public Apartman findApartman(Apartman ap) {
 		for (Apartman a : apartmani.values()) {
 			if (a.getId().equals(ap.getId())) {
@@ -80,7 +58,7 @@ public class ApartmanDAO {
 	
 	//nadji apartman po id-u
 	public Apartman findApartmanById(Integer id) {
-		if(this.apartmani.containsKey(id)) {
+		if(this.apartmani.containsKey(id) ) {
 			return this.apartmani.get(id);
 		}
 		
@@ -101,7 +79,10 @@ public class ApartmanDAO {
 	public ArrayList<Apartman> getApartmaniList() {
 		ArrayList<Apartman> apartmaniList = new ArrayList<Apartman>();
 		for (Apartman a : apartmani.values()) {
-			apartmaniList.add(a);
+			if(!a.isObrisan()) {
+				apartmaniList.add(a);
+			}
+			
 		}
 		return apartmaniList;
 	}
@@ -111,7 +92,7 @@ public class ApartmanDAO {
         ArrayList<Apartman> activeApts = new ArrayList<>();
 
         for (Apartman a : apartmani.values()) {
-            if (a.isAktivan())
+            if (a.isAktivan() && !a.isObrisan())
                 activeApts.add(a);
         }
 
@@ -140,10 +121,10 @@ public class ApartmanDAO {
 	        ArrayList<Apartman> apartmaniDomacina = new ArrayList<>();
 
 	        for (Apartman a : apartmani.values()) {
-	            System.out.println(a.toString());
-	                if (a.getDomacin().equals(username)) {
+	            //System.out.println(a.toString());
+	                if (a.getDomacin().equals(username) && !a.isObrisan()) {
 	                	apartmaniDomacina.add(a);
-	        }
+	                }
 	        }
 	        System.out.println(this.apartmani);
 	        return apartmaniDomacina;
@@ -153,7 +134,7 @@ public class ApartmanDAO {
 	public void loadApartmans(String path) {
 		BufferedReader in = null;
 		try {
-			File file = new File(path + "/data/apartmani.json");
+			File file = new File(path + "/data/apartments.json");
 			in = new BufferedReader(new FileReader(file));
 			String line;
 			StringBuilder sb = new StringBuilder();
@@ -176,7 +157,7 @@ public class ApartmanDAO {
 	public void saveApartmans(String path) {
 		BufferedWriter out = null;
 		try {
-			File file = new File(path + "/data/apartmani.json");
+			File file = new File(path + "/data/apartments.json");
 			out = new BufferedWriter(new FileWriter(file));
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());  
