@@ -116,4 +116,45 @@ function logout() {
     });
 }		        	
 	
-		        	
+	
+function search(){
+	let datumDolaska = $('#search_dat_dol').val();
+	let datumOdlaska = $('#search_dat_odl').val();
+	let mesto = $('#search_mesto').val();
+	let cenaOd = $('#search_cena_od').val();
+	let cenaDo = $('#search_cena_do').val();
+	let brojSobaOd = $('#search_brS_od').val();
+	let brojSobaDo = $('#search_brS_do').val();
+	let brojOsoba = $('#search_osobe').val();
+	
+	
+		
+	$.ajax({
+		url:'rest/apartmans/pretraga',
+		type:'POST',
+		contentType:'application/json',
+		data:JSON.stringify({datumDolaska, datumOdlaska, mesto, cenaOd, cenaDo, brojSobaOd, brojSobaDo,brojOsoba}),
+		success: function(data) {
+			$('#tblPretraga2 tbody').html('');
+			for(i = 0; i < data.length; i++) {
+				addApartmanSearch(data[i]);
+			}
+		},
+		error: function(e) {
+			alert('error');
+		}
+	});
+}
+
+function addApartmanSearch(apart) {
+	let tr = $('<tr></tr>');
+	let ime = $('<td>'+apart.ime+'</td>');
+	let mesto = $('<td>'+apart.lokacija.adresa.mesto+'</td>');
+	let cena = $('<td>'+apart.cenaPoNoci+'</td>');
+	let brojSoba = $('<td>'+apart.brojSoba+'</td>');
+	let brojGostiju = $('<td>'+apart.brojGostiju+'</td>');
+	
+	
+	tr.append(ime).append(mesto).append(cena).append(brojSoba).append(brojGostiju);
+	$('#tblPretraga2 tbody').append(tr);
+}

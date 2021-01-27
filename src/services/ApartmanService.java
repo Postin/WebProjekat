@@ -11,6 +11,7 @@ import dao.KorisnikDAO;
 import dao.RezervacijaDAO;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
@@ -149,7 +150,7 @@ public class ApartmanService {
 		LocalDate krajDatum = LocalDate.parse(apt.getKrajDatum());
 
 		for (LocalDate date = pocetakDatum; date.isBefore(krajDatum); date = date.plusDays(1)) {
-			String datum = pocetakDatum.toString();
+			String datum = date.toString();
 			a.getDatumiZaIzdavanje().add(datum);
 		}
 
@@ -168,21 +169,7 @@ public class ApartmanService {
 		return Response.status(200).build();
 	}
 	
-	@GET
-	@Path("/availableDates/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response dostupniDatumi(@Context HttpServletRequest request, @PathParam(value = "id") Integer aptId) {
 	
-		System.out.println("Primljen je zahtev za potraznju dostupnih datuma za apartman sa id:  " + aptId);
-	
-		Apartman a = ((ApartmanDAO) ctx.getAttribute("apartmanDAO")).findApartmanById(aptId);
-		if (a == null) {
-			return Response.status(400).entity("Apartman nije pronadjen").build();
-		} else {
-			return Response.status(200).entity(a.getDostupnostPoDatumima()).build();
-		}
-	
-	}
 
 	@PUT
 	@Path("/img")
@@ -333,6 +320,7 @@ public class ApartmanService {
 
 	}
 	
+//----------------------------------------	PRETRAGAAA   ---------------------------------------------
 	
 	//listaApartmana za pretragu
 		@GET
@@ -361,7 +349,43 @@ public class ApartmanService {
 		}
 		
 
+	//proveri da li su zadati datumi dostupni
+	public boolean proveriDostupnost(String startDate, String endDate, Apartman a1) {
 
+		if (a1.getDostupnostPoDatumima().size() == 0)
+			return false;
+
+		long daysBetween = ChronoUnit.DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
+			// System.out.println(daysBetween);
+
+		for (int i = 0; i < daysBetween; i++) {
+			// System.out.println(LocalDate.parse(startDate).plusDays(i));
+			LocalDate datum = LocalDate.parse(startDate).plusDays(i);
+			String datum2=datum.toString();
+			if (!a1.getDostupnostPoDatumima().contains(datum2)) {
+				return false;
+			}
+		}
+
+			   return true;
+	}
+
+	//dostupni Datumi za odredjeni apartman
+	@GET
+	@Path("/dostupnostDatuma/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response dostupniDatumi(@Context HttpServletRequest request, @PathParam(value = "id") Integer aptId) {
+
+		System.out.println("Primljen je zahtev za potraznju dostupnih datuma za apartman sa id:  " + aptId);
+
+		Apartman a = ((ApartmanDAO) ctx.getAttribute("apartmanDAO")).findApartmanById(aptId);
+			if (a == null) {
+				return Response.status(400).entity("Apartman nije pronadjen").build();
+			} else {
+				return Response.status(200).entity(a.getDostupnostPoDatumima()).build();
+			}
+
+}
 
 
 }
