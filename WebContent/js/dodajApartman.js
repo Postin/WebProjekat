@@ -327,7 +327,7 @@ $(document).ready(function () {
 
 
 function generateToolBar(user) {
-	alert("usao");
+	
 
     if (user != null) {
     	 if (user.uloga === "DOMACIN") {

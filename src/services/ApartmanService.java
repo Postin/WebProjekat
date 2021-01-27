@@ -36,6 +36,7 @@ import beans.ApartmanDto;
 import beans.ApartmanZaDomacinaDto;
 import beans.Korisnik;
 import beans.Lokacija;
+import beans.PretragaDto;
 import beans.SadrzajApartmana;
 import beans.SlikaDto;
 import beans.TipApartmana;
@@ -152,6 +153,7 @@ public class ApartmanService {
 		for (LocalDate date = pocetakDatum; date.isBefore(krajDatum); date = date.plusDays(1)) {
 			String datum = date.toString();
 			a.getDatumiZaIzdavanje().add(datum);
+			a.getDostupnostPoDatumima().add(datum);
 		}
 
 		a.setSadrzaj(sadrzajiApt);
@@ -387,7 +389,263 @@ public class ApartmanService {
 
 }
 
+	@POST
+	@Path("/pretraga")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response search(@Context HttpServletRequest request, PretragaDto pretragaDto) {
+		System.out.println(pretragaDto);
+
+		Korisnik ulogovan = (Korisnik) request.getSession().getAttribute("loggedUser");
+		if (ulogovan == null || ulogovan.getUloga().equals("GOST") || ulogovan.getUloga().equals("DOMACIN") ) {
+			System.out.println("Vrati aktivne apartmane");
+			ArrayList<Apartman> sviApartmani = new ArrayList<Apartman>(((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getActiveApartments());
+			
+			
+			
+			//----------------------- PRETRAGA PO DATUMU -------------------------------------
+
+			ArrayList<Apartman> pretragaDatum = new ArrayList<>();
+
+			if (pretragaDto.getDatumDolaska() != null && pretragaDto.getDatumDolaska() != "" && pretragaDto.getDatumOdlaska() != null
+					&& pretragaDto.getDatumOdlaska() != "")
+				for (Apartman a : sviApartmani) {
+					if (proveriDostupnost(pretragaDto.getDatumDolaska(), pretragaDto.getDatumOdlaska(), a)) {
+						pretragaDatum.add(a);
+						System.out.println("Dostupni su datumi u apartmanu: " + a.getIme());
+					}
+				}
+			else
+				pretragaDatum = new ArrayList<Apartman>(sviApartmani);
+			
+			
+			
+			//------------------------ PRETRAGA PO CENI ---------------------------------------
+
+			ArrayList<Apartman> pretragaCena = new ArrayList<>();
+
+			if (pretragaDto.getCenaOd() != 0 && pretragaDto.getCenaDo() != 0) {
+				for (Apartman a : pretragaDatum) {
+					if (a.getCenaPoNoci() != 0) {
+						if (a.getCenaPoNoci() > pretragaDto.getCenaOd() && a.getCenaPoNoci() <= pretragaDto.getCenaDo()) {
+							pretragaCena.add(a);
+						}
+					}
+				}
+			} else if (pretragaDto.getCenaOd() != 0) {
+				for (Apartman a : pretragaDatum) {
+					if (a.getCenaPoNoci() != 0) {
+						if (a.getCenaPoNoci() >= pretragaDto.getCenaOd()) {
+							pretragaCena.add(a);
+						}
+					}
+				}
+			} else if (pretragaDto.getCenaDo() != 0) {
+				for (Apartman a : pretragaDatum) {
+					if (a.getCenaPoNoci() != 0) {
+						if (a.getCenaPoNoci() <= pretragaDto.getCenaDo()) {
+							pretragaCena.add(a);
+						}
+					}
+				}
+			} else {
+				pretragaCena = pretragaDatum;
+			}
+			
+			
+			
+			//--------------------------- PRETRAGA PO BROJU SOBA ------------------------------------------------------
+
+			ArrayList<Apartman> pretragaSoba = new ArrayList<>();
+
+			if (pretragaDto.getBrojSobaOd() != 0 && pretragaDto.getBrojSobaDo() != 0) {
+				for (Apartman a : pretragaCena) {
+					if (a.getBrojSoba() != 0) {
+						if (a.getBrojSoba() > pretragaDto.getBrojSobaOd() && a.getBrojSoba() <= pretragaDto.getBrojSobaDo()) {
+							pretragaSoba.add(a);
+						}
+					}
+				}
+			} else if (pretragaDto.getBrojSobaOd() != 0) {
+				for (Apartman a : pretragaCena) {
+					if (a.getBrojSoba() != 0) {
+						if (a.getBrojSoba() >= pretragaDto.getBrojSobaOd()) {
+							pretragaSoba.add(a);
+						}
+					}
+				}
+			} else if (pretragaDto.getBrojSobaDo() != 0) {
+				for (Apartman a : pretragaCena) {
+					if (a.getBrojSoba() != 0) {
+						if (a.getBrojSoba() <= pretragaDto.getBrojSobaDo()) {
+							pretragaSoba.add(a);
+						}
+					}
+				}
+			} else {
+				pretragaSoba = pretragaCena;
+			}
+			
+			
+			
+			//-------------------- PRETRAGA PO BROJU OSOBA -------------------------------------------------------------
+
+			ArrayList<Apartman> pretragaOsobe = new ArrayList<>();
+
+			if (pretragaDto.getBrojOsoba() != 0) {
+				for (Apartman a : pretragaSoba) {
+					if (a.getBrojGostiju() != 0) {
+						if (a.getBrojGostiju() == pretragaDto.getBrojOsoba())
+							pretragaOsobe.add(a);
+					}
+				}
+			} else {
+				pretragaOsobe = pretragaSoba;
+			}
+			
+			
+			
+			//-------------------- PRETRAGA PO LOKACIJI -------------------------------------------------------------
+
+			ArrayList<Apartman> pretragaLokacije = new ArrayList<>();
+
+			if (pretragaDto.getMesto() != null && pretragaDto.getMesto() != "") {
+				for (Apartman a : pretragaOsobe) {
+					if (a.getLokacija().getAdresa().getMesto() != null) {
+						if (a.getLokacija().getAdresa().getMesto() == pretragaDto.getMesto())
+							pretragaLokacije.add(a);
+					}
+				}
+			} else {
+				pretragaLokacije = pretragaOsobe;
+			}
+
+			return Response.status(200).entity(pretragaLokacije).build();
+		
+		
+		}else  {
+				ArrayList<Apartman> sviApartmani2 = new ArrayList<Apartman>(((ApartmanDAO) ctx.getAttribute("apartmanDAO")).getApartmaniList());
+				
+				//----------------------- PRETRAGA PO DATUMU -------------------------------------
+
+				ArrayList<Apartman> pretragaDatum = new ArrayList<>();
+
+				if (pretragaDto.getDatumDolaska() != null && pretragaDto.getDatumDolaska() != "" && pretragaDto.getDatumOdlaska() != null
+						&& pretragaDto.getDatumOdlaska() != "")
+					for (Apartman a : sviApartmani2) {
+						if (proveriDostupnost(pretragaDto.getDatumDolaska(), pretragaDto.getDatumOdlaska(), a)) {
+							pretragaDatum.add(a);
+							System.out.println("Dostupni su datumi u apartmanu: " + a.getIme());
+						}
+					}
+				else
+					pretragaDatum = new ArrayList<Apartman>(sviApartmani2);
+				
+				
+				
+				//------------------------ PRETRAGA PO CENI ---------------------------------------
+
+				ArrayList<Apartman> pretragaCena = new ArrayList<>();
+
+				if (pretragaDto.getCenaOd() != 0 && pretragaDto.getCenaDo() != 0) {
+					for (Apartman a : pretragaDatum) {
+						if (a.getCenaPoNoci() != 0) {
+							if (a.getCenaPoNoci() > pretragaDto.getCenaOd() && a.getCenaPoNoci() <= pretragaDto.getCenaDo()) {
+								pretragaCena.add(a);
+							}
+						}
+					}
+				} else if (pretragaDto.getCenaOd() != 0) {
+					for (Apartman a : pretragaDatum) {
+						if (a.getCenaPoNoci() != 0) {
+							if (a.getCenaPoNoci() >= pretragaDto.getCenaOd()) {
+								pretragaCena.add(a);
+							}
+						}
+					}
+				} else if (pretragaDto.getCenaDo() != 0) {
+					for (Apartman a : pretragaDatum) {
+						if (a.getCenaPoNoci() != 0) {
+							if (a.getCenaPoNoci() <= pretragaDto.getCenaDo()) {
+								pretragaCena.add(a);
+							}
+						}
+					}
+				} else {
+					pretragaCena = pretragaDatum;
+				}
+				
+				
+				
+				//--------------------------- PRETRAGA PO BROJU SOBA ------------------------------------------------------
+
+				ArrayList<Apartman> pretragaSoba = new ArrayList<>();
+
+				if (pretragaDto.getBrojSobaOd() != 0 && pretragaDto.getBrojSobaDo() != 0) {
+					for (Apartman a : pretragaCena) {
+						if (a.getBrojSoba() != 0) {
+							if (a.getBrojSoba() > pretragaDto.getBrojSobaOd() && a.getBrojSoba() <= pretragaDto.getBrojSobaDo()) {
+								pretragaSoba.add(a);
+							}
+						}
+					}
+				} else if (pretragaDto.getBrojSobaOd() != 0) {
+					for (Apartman a : pretragaCena) {
+						if (a.getBrojSoba() != 0) {
+							if (a.getBrojSoba() >= pretragaDto.getBrojSobaOd()) {
+								pretragaSoba.add(a);
+							}
+						}
+					}
+				} else if (pretragaDto.getBrojSobaDo() != 0) {
+					for (Apartman a : pretragaCena) {
+						if (a.getBrojSoba() != 0) {
+							if (a.getBrojSoba() <= pretragaDto.getBrojSobaDo()) {
+								pretragaSoba.add(a);
+							}
+						}
+					}
+				} else {
+					pretragaSoba = pretragaCena;
+				}
+				
+				
+				
+				//-------------------- PRETRAGA PO BROJU OSOBA -------------------------------------------------------------
+
+				ArrayList<Apartman> pretragaOsobe = new ArrayList<>();
+
+				if (pretragaDto.getBrojOsoba() != 0) {
+					for (Apartman a : pretragaSoba) {
+						if (a.getBrojGostiju() != 0) {
+							if (a.getBrojGostiju() == pretragaDto.getBrojOsoba())
+								pretragaOsobe.add(a);
+						}
+					}
+				} else {
+					pretragaOsobe = pretragaSoba;
+				}
+				
+				
+				
+				//-------------------- PRETRAGA PO LOKACIJI -------------------------------------------------------------
+
+				ArrayList<Apartman> pretragaLokacije = new ArrayList<>();
+
+				if (pretragaDto.getMesto() != null && pretragaDto.getMesto() != "") {
+					for (Apartman a : pretragaOsobe) {
+						if (a.getLokacija().getAdresa().getMesto() != null) {
+							if (a.getLokacija().getAdresa().getMesto() == pretragaDto.getMesto())
+								pretragaLokacije.add(a);
+						}
+					}
+				} else {
+					pretragaLokacije = pretragaOsobe;
+				}
+
+				return Response.status(200).entity(pretragaLokacije).build();
+			}
+		
+	}
 
 }
-
-
