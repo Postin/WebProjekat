@@ -17,9 +17,19 @@ $(document).ready(function() {
 		        success: function (listaApt) {
 		        	$('#tblPretraga tbody').html('');
 					let data = [];
-					
+					let sadrzaj = ""
+					let status = ""
 					for(i = 0; i < listaApt.length; i++) {
-						let d = [listaApt[i].ime, listaApt[i].lokacija.adresa.mesto, listaApt[i].cenaPoNoci, listaApt[i].brojSoba,listaApt[i].brojGostiju];
+						for(am of listaApt[i].sadrzaj){
+							sadrzaj = sadrzaj.concat(am.naziv + ",");
+						}
+						if(listaApt[i].aktivan){
+							status = "aktivan";
+						}else{
+							status = "blokiran";
+						}
+						
+						let d = [listaApt[i].ime, listaApt[i].lokacija.adresa.mesto, listaApt[i].cenaPoNoci, listaApt[i].brojSoba,listaApt[i].brojGostiju, sadrzaj, listaApt[i].tip, status ];
 						data.push(d);
 						}
 						
