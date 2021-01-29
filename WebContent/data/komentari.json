@@ -1,0 +1,53 @@
+{
+	"1" :{
+		"id" : 1,
+		"gostKorisnickoIme" : "gost",
+		"apartmanId" : 1,
+		"tekst" : "Jako ljubazni",
+		"ocena" : 5,
+		"vidljivost":true
+	},
+	
+	"2" :{
+		"id" : 2,
+		"gostKorisnickoIme" : "gost",
+		"apartmanId" : 1,
+		"tekst" : "Higijena na nivou",
+		"ocena" : 5,
+		"vidljivost":true
+	
+	},
+	
+	"3" :{
+		"id" : 3,
+		"gostKorisnickoIme" : "gost",
+		"apartmanId" : 1,
+		"tekst" : "Cena - povoljna",
+		"ocena" : 4,
+		"vidljivost":true
+	
+	},
+	
+	"4" :{
+		"id" : 4,
+		"gostKorisnickoIme" : "gost",
+		"apartmanId" : 2,
+		"tekst" : "Skupo",
+		"ocena" : 3,
+		"vidljivost":true
+	
+	},
+	
+	"5" :{
+		"id" : 5,
+		"gostKorisnickoIme" : "gost",
+		"apartmanId" : 2,
+		"tekst" : "Konobar neljubazan",
+		"ocena" : 3,
+		"vidljivost":true
+	
+	}
+
+
+
+}

@@ -26,5 +26,34 @@
     "obrisan" : false,
     "sadrzaj" : [{"id" : 11,"naziv" :"bazen za decu","obrisan" :false} ]
     
+ 	},
+ 	
+ 	"2" : {
+    "id" : 2,
+    "tip" : "CEO",
+    "ime" : "Ime2",
+    "brojSoba" : 3,
+ 	"brojGostiju" : 2,
+    "lokacija" : {
+      "geoSirina" : 45.014,
+      "geoDuzina" : 19.821,
+      "adresa" : {
+        "ulicaIbr" : "Strazilovska 16",
+        "mesto" : "Sabac",
+        "postanskiBr" : 15000
+      }
+    },
+    "datumiZaIzdavanje" : [ ],
+    "dostupnostPoDatumima" : [ ],
+    "domacin" : "domacin",
+    "komentari" : [ ],
+    "slike" : [ ],
+    "cenaPoNoci" : 50,
+    "vremeZaPrijavu" : "14:00",
+    "vremeZaOdjavu" : "10:00",
+    "aktivan" : true,
+    "obrisan" : false,
+    "sadrzaj" : [{"id" : 12,"naziv" :"sauna","obrisan" :false} ]
+    
  	}
  }

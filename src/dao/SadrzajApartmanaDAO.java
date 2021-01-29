@@ -83,7 +83,7 @@ public class SadrzajApartmanaDAO {
 					sb.append(line);
 				}
 				ObjectMapper mapper = new ObjectMapper();
-				this.sadrzaji = mapper.readValue(sb.toString(), new TypeReference<Map<String, SadrzajApartmana>>(){});
+				this.sadrzaji = mapper.readValue(sb.toString(), new TypeReference<Map<Integer, SadrzajApartmana>>(){});
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

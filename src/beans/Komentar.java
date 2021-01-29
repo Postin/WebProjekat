@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public class Komentar {
 	private Integer id;
-	private Korisnik gost;
-	private Apartman apartman;
+	private String gostKorisnickoIme;
+	private Integer apartmanId;
 	private String tekst;
 	private int ocena;
 	private boolean vidljivost;
@@ -14,11 +14,11 @@ public class Komentar {
 
 	}
 	
-	public Komentar(Integer id, Korisnik gost, Apartman apartman, String tekst, int ocena) {
+	public Komentar(Integer id, String gost, Integer apartmanId, String tekst, int ocena) {
 		super();
 		this.id = id;
-		this.gost = gost;
-		this.apartman = apartman;
+		this.gostKorisnickoIme = gostKorisnickoIme;
+		this.apartmanId = apartmanId;
 		this.tekst = tekst;
 		this.ocena = ocena;
 		this.vidljivost = true;
@@ -39,18 +39,24 @@ public class Komentar {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Korisnik getGost() {
-		return gost;
+	
+	
+	public String getGostKorisnickoIme() {
+		return gostKorisnickoIme;
 	}
-	public void setGost(Korisnik gost) {
-		this.gost = gost;
+
+	public void setGostKorisnickoIme(String gostKorisnickoIme) {
+		this.gostKorisnickoIme = gostKorisnickoIme;
 	}
-	public Apartman getApartman() {
-		return apartman;
+
+	public Integer getApartmanId() {
+		return apartmanId;
 	}
-	public void setApartman(Apartman apartman) {
-		this.apartman = apartman;
+
+	public void setApartmanId(Integer apartmanId) {
+		this.apartmanId = apartmanId;
 	}
+
 	public String getTekst() {
 		return tekst;
 	}
@@ -66,7 +72,7 @@ public class Komentar {
 
 	@Override
 	public String toString() {
-		return "Komentar [id=" + id + ", gost=" + gost + ", apartman=" + apartman + ", tekst=" + tekst + ", ocena="
+		return "Komentar [id=" + id + ", gost=" + gostKorisnickoIme + ", apartman=" + apartmanId + ", tekst=" + tekst + ", ocena="
 				+ ocena + "]";
 	}
 	

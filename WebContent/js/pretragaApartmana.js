@@ -81,7 +81,7 @@ function generateToolBar(user) {
       //      $('#toolbar').append("<a href=\"userList.html\" id=\"userList\" data-toggle=\"tooltip\" title=\"toggle search bar\">User List</a>");
       //      $('#toolbar').append("<a href=\"holidays.html\" id=\"holidays\" data-toggle=\"tooltip\" title=\"toggle search bar\">Holidays</a>");
         
-        }else if (loggedUser.uloga === "GOST") {
+        }else if (user.uloga === "GOST") {
            
             var back = document.createElement('a');
             back.innerHTML = "Back";
