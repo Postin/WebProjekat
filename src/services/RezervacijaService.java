@@ -1,6 +1,9 @@
 package services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -149,6 +152,48 @@ public class RezervacijaService {
 		String path = ctx.getRealPath("");
 		rezervacije.saveRezervacije(path);
 		
+		return Response.status(200).build();
+	}
+	
+	@POST
+	@Path("/kreiraj/{poruka}/{datum}/{brNocenja}/{gost}/{ime}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response kreiraj(@PathParam("poruka") String poruka,@PathParam("datum") String datum,
+			@PathParam("brNocenja") int brNocenja, @PathParam("gost") String gost, @PathParam("ime") String imeApartmana) {
+		
+		RezervacijaDAO rezervacije = (RezervacijaDAO)ctx.getAttribute("rezervacijaDAO");
+		ApartmanDAO apartmani = (ApartmanDAO)ctx.getAttribute("apartmanDAO");
+		Apartman a = apartmani.findApartmanByName(imeApartmana);
+		int idRezervacije = 1;
+		for(Rezervacija r: rezervacije.getRezervacije().values()) {
+			idRezervacije+=1;
+		}
+		Date d1 = null;
+		try {
+			d1 = new SimpleDateFormat("YYYY-MM-dd").parse(datum);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		int ukupnaCena = a.getCenaPoNoci() * brNocenja;		
+		Rezervacija r = new Rezervacija(idRezervacije, a.getId(), d1, brNocenja, ukupnaCena, poruka, gost, "Kreirana");
+		rezervacije.addRezervacija(r);
+		
+		ArrayList<String> datumi = a.getDatumiZaIzdavanje();
+		for(String s : datumi) {
+			System.out.println("datum:"+s);
+		}
+		
+		if(datumi.contains(datum)) {
+			datumi.remove(datum);
+			System.out.println("Datum je zauzet.");
+			return Response.status(200).entity("Datum je zauzet.").build();
+		}
+		datumi.add(datum);
+		ctx.setAttribute("apartmanDAO", apartmani);
+		ctx.setAttribute("rezervacijaDAO", rezervacije);
+
 		return Response.status(200).build();
 	}
 

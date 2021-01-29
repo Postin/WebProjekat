@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Kreiranje rezervacije</title>
+<script src="jquery-3.3.1.min.js"></script>
+<script>
+	function rezervisi(){
+		let poruka = $("#txtPoruka").val();
+		let datum = $("#txtDatum").val();
+		let brNocenja = $("#txtBrNocenja").val();
+		let gost = sessionStorage.getItem("loggedIn");
+		if(gost == null) {
+			alert("Morate se prvo ulogovati da biste pravili rezervacije.");
+			return;
+		}
+		let ime = sessionStorage.getItem("imeApartmana");
+		alert(datum);
+		
+		if(poruka.length == 0 || datum.length == 0 || brNocenja.length == 0) {
+			alert("Niste uneli sva potrebna polja.");
+			return;
+		}
+		
+		$.ajax({
+			url:'rest/rezervacija/kreiraj/'+poruka+'/'+datum+'/'+brNocenja+'/'+gost+'/'+ime,
+			type:'POST',
+			contentType:'application/json',
+			success: function(poruka) {
+				alert("Uspesno kreirana rezervacija.");
+				alert(poruka);
+			},
+			error: function() {
+				alert('Greska.');
+			}
+		});
+	}
+</script>
+</head>
+<body>
+	<a href="pretragaApartmana.html">Nazad</a>
+	<table>
+		<tr>
+			<td>
+				Poruka:
+			</td>
+			<td>
+				<input type="text" id="txtPoruka">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Datum:
+			</td>
+			<td>
+				<input type="date" id="txtDatum">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Broj nocenja:
+			</td>
+			<td>
+				<input type="number" id="txtBrNocenja">
+			</td>
+		</tr>
+		<tr>
+			<td><button id="btnKreiraj" onclick="rezervisi();">Kreiraj</button></td>
+		</tr>
+	</table>
+</body>
+</html>
