@@ -173,6 +173,16 @@ public class ApartmanDAO {
 			}
 		}
 	}
+
+
+	public Apartman findApartmanByName(String imeApartmana) {
+		for(Apartman a: apartmani.values()) {
+			if (a.getIme().equals(imeApartmana)) {
+				return a;
+			}
+		}		
+		return null;
+	}
 	
 	
 }

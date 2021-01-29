@@ -1,43 +1,56 @@
 $(document).ready(function() {
 	 
-		loggedUser = null;
-	    
-		$.get({
-	        url: 'rest/users/ulogovan',
-	        success: function (user) {
-	            loggedUser = user;
-	            generateToolBar(user);
-	      
-	        }
-	    });
-	
-	    
-		 $.get({
-		        url: 'rest/apartmans/listaZaPretragu',
-		        success: function (listaApt) {
-		        	$('#tblPretraga tbody').html('');
-					let data = [];
-					let sadrzaj = ""
-					let status = ""
-					for(i = 0; i < listaApt.length; i++) {
-						for(am of listaApt[i].sadrzaj){
-							sadrzaj = sadrzaj.concat(am.naziv + ",");
-						}
-						if(listaApt[i].aktivan){
-							status = "aktivan";
-						}else{
-							status = "blokiran";
-						}
-						
-						let d = [listaApt[i].ime, listaApt[i].lokacija.adresa.mesto, listaApt[i].cenaPoNoci, listaApt[i].brojSoba,listaApt[i].brojGostiju, sadrzaj, listaApt[i].tip, status ];
-						data.push(d);
-						}
-						
-						// inicijalizacija datatable-a
-						$('#tblPretraga').DataTable( {
-						    dom: "Bfrtip",
-						    data: data
-						  });
+	loggedUser = null;
+    
+	$.get({
+        url: 'rest/users/ulogovan',
+        success: function (user) {
+            loggedUser = user;
+            generateToolBar(user);
+      
+        }
+    });
+
+    
+	 $.get({
+	        url: 'rest/apartmans/listaZaPretragu',
+	        success: function (listaApt) {
+	        	$('#tblPretraga tbody').html('');
+				let data = [];
+				let sadrzaj = ""
+				let status = ""
+				for(i = 0; i < listaApt.length; i++) {
+					for(am of listaApt[i].sadrzaj){
+						sadrzaj = sadrzaj.concat(am.naziv + ",");
+					}
+					if(listaApt[i].aktivan){
+						status = "aktivan";
+					}else{
+						status = "blokiran";
+					}
+					
+					let d = [listaApt[i].ime, listaApt[i].lokacija.adresa.mesto, listaApt[i].cenaPoNoci, listaApt[i].brojSoba,listaApt[i].brojGostiju, sadrzaj, listaApt[i].tip, status ];
+					data.push(d);
+					}
+					
+					// inicijalizacija datatable-a
+					var table = $('#tblPretraga').DataTable( {
+					    dom: "Bfrtip",
+					    data: data,
+						"columnDefs": [ {
+				            "targets": 8,
+				            "data": null,
+				            "defaultContent": "<button class=\"btnRezervisi\">Rezervisi!</button>"
+				        }]
+					  });
+			
+					$('#tblPretraga tbody').on( 'click', '.btnRezervisi', function () {
+							var data = table.row( $(this).parents('tr') ).data();
+							ime = data[0];
+							sessionStorage.setItem("imeApartmana",ime);
+							location.href="KreiranjeRezervacije.html";
+					    });
+				
 					}
 		    	});
 		    	
